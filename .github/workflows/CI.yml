@@ -28,7 +28,10 @@ jobs:
       run: |
         git clone https://github.com/eschnett/MPItrampoline
         cd MPItrampoline
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpitrampoline
+        cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpitrampoline
         cmake --build build
         cmake --install build
 
@@ -37,7 +40,12 @@ jobs:
       # is only required if you are using a single-configuration
       # generator such as make. See
       # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DMPI_HOME=${{github.workspace}}/mpitrampoline -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: |
+        cmake -B ${{github.workspace}}/build \
+            -DMPI_C_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpicc \
+            -DMPI_CXX_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpicxx \
+            -DMPI_Fortran_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpifort \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       # Build your program with the given configuration
@@ -63,7 +71,10 @@ jobs:
         sudo apt-get install ${packages}
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
-        cmake -B ${{github.workspace}}/MPIwrapper/build -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}
+        cmake -B ${{github.workspace}}/MPIwrapper/build \
+            -DCMAKE_CXX_COMPILER=mpicxx \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}
         cmake --build ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
         cmake --install ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
 
