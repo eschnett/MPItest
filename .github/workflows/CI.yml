@@ -42,9 +42,7 @@ jobs:
       # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         cmake -B ${{github.workspace}}/build \
-            -DMPI_C_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpicc \
-            -DMPI_CXX_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpicxx \
-            -DMPI_Fortran_COMPILER=${{github.workspace}}/mpitrampoline/bin/mpifort \
+            -DMPI_HOME=${{github.workspace}}/mpitrampoline \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
