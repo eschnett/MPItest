@@ -30,7 +30,6 @@ jobs:
         cd MPItrampoline
         cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DBUILD_SHARED_LIBS=OFF \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
