@@ -43,7 +43,12 @@ jobs:
       run: |
         cmake -B ${{github.workspace}}/build \
             -DMPI_HOME=$HOME/mpitrampoline \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} || true
+        echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
+        cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
+        echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
+        cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
+        false
 
     - name: Build
       # Build your program with the given configuration
