@@ -23,17 +23,16 @@ include(GNUInstallDirs)
 
 find_package(MPI REQUIRED)
 
-# TODO: Add ${CMAKE_DL_LIBS} automatically
 add_executable(mpi-test-c mpi-test-c.c)
-target_link_libraries(mpi-test-c PUBLIC MPI::MPI_C ${CMAKE_DL_LIBS})
+target_link_libraries(mpi-test-c PUBLIC MPI::MPI_C)
 
 add_executable(mpi-test-cxx mpi-test-cxx.cxx)
-target_link_libraries(mpi-test-cxx PUBLIC MPI::MPI_CXX ${CMAKE_DL_LIBS})
+target_link_libraries(mpi-test-cxx PUBLIC MPI::MPI_CXX)
 
 add_executable(mpi-test-f mpi-test-f.f)
-target_link_libraries(mpi-test-f PUBLIC MPI::MPI_Fortran ${CMAKE_DL_LIBS})
+target_link_libraries(mpi-test-f PUBLIC MPI::MPI_Fortran)
 
 add_executable(mpi-test-f90 mpi-test-f90.f90)
-target_link_libraries(mpi-test-f90 PUBLIC MPI::MPI_Fortran ${CMAKE_DL_LIBS})
+target_link_libraries(mpi-test-f90 PUBLIC MPI::MPI_Fortran)
 
 install(TARGETS mpi-test-c mpi-test-cxx mpi-test-f mpi-test-f90)

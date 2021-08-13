@@ -60,6 +60,12 @@ jobs:
       # Install your program
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
+    - name: ls
+      run: |
+        ls -lR $HOME/mpitest
+        nm $HOME/mpitest/bin/mpi-test-c
+        ldd $HOME/mpitest/bin/mpi-test-c
+
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
