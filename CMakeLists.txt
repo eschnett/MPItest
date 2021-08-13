@@ -13,6 +13,8 @@ project(
   LANGUAGES C CXX Fortran
   )
 
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
