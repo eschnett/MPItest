@@ -30,7 +30,6 @@ jobs:
         cd MPItrampoline
         cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DBUILD_SHARED_LIBS=ON \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
@@ -43,12 +42,7 @@ jobs:
       run: |
         cmake -B ${{github.workspace}}/build \
             -DMPI_HOME=$HOME/mpitrampoline \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} || true
-        echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
-        cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
-        echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
-        cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
-        false
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       # Build your program with the given configuration
