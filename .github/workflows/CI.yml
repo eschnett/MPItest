@@ -31,7 +31,7 @@ jobs:
         cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Debug \
             -DBUILD_SHARED_LIBS=OFF \
-            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpitrampoline
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
 
@@ -42,7 +42,7 @@ jobs:
       # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         cmake -B ${{github.workspace}}/build \
-            -DMPI_HOME=${{github.workspace}}/mpitrampoline \
+            -DMPI_HOME=$HOME/mpitrampoline \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
@@ -72,7 +72,7 @@ jobs:
         cmake -B ${{github.workspace}}/MPIwrapper/build \
             -DCMAKE_CXX_COMPILER=mpicxx \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
         cmake --build ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
         cmake --install ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
 
@@ -82,8 +82,8 @@ jobs:
             MPICH) mpiexec='mpiexec';;
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
-        export MPITRAMPOLINE_LIB=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 ${{github.workspace}}/mpitrampoline/bin/mpi-test-c
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
       run: |
@@ -91,8 +91,8 @@ jobs:
             MPICH) mpiexec='mpiexec';;
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
-        export MPITRAMPOLINE_LIB=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 ${{github.workspace}}/mpitrampoline/bin/mpi-test-cxx
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-cxx
 
     - name: Test Fortran 77 ${{matrix.mpi}}
       run: |
@@ -100,8 +100,8 @@ jobs:
             MPICH) mpiexec='mpiexec';;
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
-        export MPITRAMPOLINE_LIB=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 ${{github.workspace}}/mpitrampoline/bin/mpi-test-f
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-f
 
     - name: Test Fortran 90 ${{matrix.mpi}}
       run: |
@@ -109,5 +109,5 @@ jobs:
             MPICH) mpiexec='mpiexec';;
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
-        export MPITRAMPOLINE_LIB=${{github.workspace}}/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 ${{github.workspace}}/mpitrampoline/bin/mpi-test-f90
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-f90
