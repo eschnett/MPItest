@@ -1,3 +1,11 @@
+#[[
+rm -rf build ../MPIstuff/mpitest
+cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DMPI_HOME=$HOME/src/c/MPIstuff/mpitrampoline -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
+cmake --build build && cmake --install build
+]]
+
+
+
 cmake_minimum_required(VERSION 3.12...3.20)
 project(
   MPItest VERSION 1.0.0
