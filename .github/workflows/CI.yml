@@ -60,6 +60,7 @@ jobs:
       # Install your program
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
+    # TODO: Remove this again
     - name: ls
       run: |
         ls -lR $HOME/mpitest
