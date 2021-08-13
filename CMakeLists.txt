@@ -21,8 +21,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
-# TODO: cmake doesn't find MPI because libmpi.a is a static library
-# that depends on -ldl, but cmake doesn't know this
 find_package(MPI REQUIRED)
 
 add_executable(mpi-test-c mpi-test-c.c)

@@ -43,13 +43,7 @@ jobs:
         cmake -B ${{github.workspace}}/build \
             -DMPI_HOME=$HOME/mpitrampoline \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpitest ||
-        {
-            echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
-            cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeOutput.log
-            echo /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
-            cat /home/runner/work/MPItest/MPItest/build/CMakeFiles/CMakeError.log
-        }
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
 
     - name: Build
       # Build your program with the given configuration
@@ -65,13 +59,6 @@ jobs:
     - name: Install
       # Install your program
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    # TODO: Remove this again
-    - name: ls
-      run: |
-        ls -lR $HOME/mpitest
-        nm $HOME/mpitest/bin/mpi-test-c
-        ldd $HOME/mpitest/bin/mpi-test-c
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
