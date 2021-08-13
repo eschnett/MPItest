@@ -42,7 +42,8 @@ jobs:
       run: |
         cmake -B ${{github.workspace}}/build \
             -DMPI_HOME=$HOME/mpitrampoline \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
 
     - name: Build
       # Build your program with the given configuration
@@ -57,7 +58,7 @@ jobs:
 
     - name: Install
       # Install your program
-      run: sudo cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
@@ -82,7 +83,7 @@ jobs:
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-c
+        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
       run: |
@@ -91,7 +92,7 @@ jobs:
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-cxx
+        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-cxx
 
     - name: Test Fortran 77 ${{matrix.mpi}}
       run: |
@@ -100,7 +101,7 @@ jobs:
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-f
+        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-f
 
     - name: Test Fortran 90 ${{matrix.mpi}}
       run: |
@@ -109,4 +110,4 @@ jobs:
             OpenMPI) mpiexec='mpiexec --oversubscribe';;
         esac
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitrampoline/bin/mpi-test-f90
+        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-f90
