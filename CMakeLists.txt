@@ -2,6 +2,11 @@
 rm -rf build ../MPIstuff/mpitest
 cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DMPI_HOME=$HOME/src/c/MPIstuff/mpitrampoline -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
 cmake --build build && cmake --install build
+
+env MPITRAMPOLINE_LIB=/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.dylib mpiexec-openmpi-gcc11 -n 4 /Users/eschnett/src/c/MPIstuff/mpitest/bin/mpi-test-c
+env MPITRAMPOLINE_LIB=/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.dylib mpiexec-openmpi-gcc11 -n 4 /Users/eschnett/src/c/MPIstuff/mpitest/bin/mpi-test-cxx
+env MPITRAMPOLINE_LIB=/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.dylib mpiexec-openmpi-gcc11 -n 4 /Users/eschnett/src/c/MPIstuff/mpitest/bin/mpi-test-f
+env MPITRAMPOLINE_LIB=/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.dylib mpiexec-openmpi-gcc11 -n 4 /Users/eschnett/src/c/MPIstuff/mpitest/bin/mpi-test-f90
 ]]
 
 
