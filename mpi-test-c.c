@@ -63,6 +63,14 @@ int main(int argc, char **argv) {
     assert(count == 1);
   }
 
+  struct float5 {
+    float elts[5];
+  };
+  MPI_Datatype mpi_float5;
+  MPI_Type_contiguous(5, MPI_FLOAT, &mpi_float5);
+  MPI_Datatype mpi_float55;
+  MPI_Type_contiguous(5, mpi_float5, &mpi_float55);
+
   MPI_Barrier(MPI_COMM_WORLD);
 
   MPI_Finalize();

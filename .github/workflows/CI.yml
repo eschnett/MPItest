@@ -13,6 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpi: [MPICH, OpenMPI]
 
     # The CMake configure and build commands are platform agnostic and
@@ -40,10 +41,28 @@ jobs:
       # generator such as make. See
       # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
-        cmake -B ${{github.workspace}}/build \
-            -DMPI_HOME=$HOME/mpitrampoline \
-            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
+        case "${{matrix.mpi}}" in
+        MPIEXEC_EXECUTABLE)
+            cmake -B ${{github.workspace}}/build \
+                -DMPIEXEC_EXECUTABLE=$HOME/mpitrampoline/bin/mpiexec \
+                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
+            ;;
+        MPI_HOME)
+            cmake -B ${{github.workspace}}/build \
+                -DMPI_HOME=$HOME/mpitrampoline \
+                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
+            ;;
+        CMAKE_C_COMPILER)
+            cmake -B ${{github.workspace}}/build \
+                -DCMAKE_C_COMPILER=$HOME/mpitrampoline/bin/mpicc \
+                -DCMAKE_CXX_COMPILER=$HOME/mpitrampoline/bin/mpicxx \
+                -DCMAKE_Fortran_COMPILER=$HOME/mpitrampoline/bin/mpifc \
+                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
+            ;;
+        esac
 
     - name: Build
       # Build your program with the given configuration

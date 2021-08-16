@@ -1,6 +1,16 @@
 #[[
+# Test all the ways in which cmake looks for an MPI library
+
+rm -rf build ../MPIstuff/mpitest
+cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
+cmake --build build && cmake --install build
+
 rm -rf build ../MPIstuff/mpitest
 cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DMPI_HOME=$HOME/src/c/MPIstuff/mpitrampoline -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
+cmake --build build && cmake --install build
+
+rm -rf build ../MPIstuff/mpitest
+env MPITRAMPOLINE_CC=gcc-mp-11 MPITRAMPOLINE_CXX=g++-mp-11 MPITRAMPOLINE_FC=gfortran-mp-11 cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicc -DCMAKE_CXX_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicxx -DCMAKE_Fortran_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpifc -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
 cmake --build build && cmake --install build
 
 env MPITRAMPOLINE_LIB=/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.dylib mpiexec-openmpi-gcc11 -n 4 /Users/eschnett/src/c/MPIstuff/mpitest/bin/mpi-test-c
