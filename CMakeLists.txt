@@ -44,10 +44,16 @@ target_link_libraries(mpi-test-c PUBLIC MPI::MPI_C)
 add_executable(mpi-test-cxx mpi-test-cxx.cxx)
 target_link_libraries(mpi-test-cxx PUBLIC MPI::MPI_CXX)
 
-add_executable(mpi-test-f mpi-test-f.f)
-target_link_libraries(mpi-test-f PUBLIC MPI::MPI_Fortran)
+add_executable(mpi-test-mpif-f mpi-test-mpif-f.f)
+target_link_libraries(mpi-test-mpif-f PUBLIC MPI::MPI_Fortran)
 
-add_executable(mpi-test-f90 mpi-test-f90.f90)
-target_link_libraries(mpi-test-f90 PUBLIC MPI::MPI_Fortran)
+add_executable(mpi-test-mpif-f90 mpi-test-mpif-f90.f90)
+target_link_libraries(mpi-test-mpif-f90 PUBLIC MPI::MPI_Fortran)
 
-install(TARGETS mpi-test-c mpi-test-cxx mpi-test-f mpi-test-f90)
+add_executable(mpi-test-mpi-f90 mpi-test-mpi-f90.f90)
+target_link_libraries(mpi-test-mpi-f90 PUBLIC MPI::MPI_Fortran)
+
+add_executable(mpi-test-mpi_f08-f90 mpi-test-mpi_f08-f90.f90)
+target_link_libraries(mpi-test-mpi_f08-f90 PUBLIC MPI::MPI_Fortran)
+
+install(TARGETS mpi-test-c mpi-test-cxx mpi-test-mpif-f mpi-test-mpif-f90 mpi-test-mpi-f90 mpi-test-mpi_f08-f90)
