@@ -41,7 +41,7 @@ jobs:
       # generator such as make. See
       # https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
-        case "${{matrix.mpi}}" in
+        case "${{matrix.findmpi}}" in
         MPIEXEC_EXECUTABLE)
             cmake -B ${{github.workspace}}/build \
                 -DMPIEXEC_EXECUTABLE=$HOME/mpitrampoline/bin/mpiexec \
