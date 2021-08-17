@@ -73,6 +73,12 @@ int main(int argc, char **argv) {
 
   MPI_Barrier(MPI_COMM_WORLD);
 
+  {
+    int ivalue = rank;
+    MPI_Bcast(&ivalue, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    assert(ivalue == 0);
+  }
+
   MPI_Finalize();
 
   MPI_Initialized(&initialized);

@@ -13,6 +13,8 @@ jobs:
   build:
     strategy:
       matrix:
+        # TODO: Test on 32-bit systems
+        # TODO: Test on MacOS (our shared library handling on MacOS is broken...), Windows
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpi: [MPICH, OpenMPI]
 
