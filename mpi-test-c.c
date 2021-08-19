@@ -3,6 +3,12 @@
 #include <assert.h>
 #include <stdio.h>
 
+void add(void *invec, void *inoutvec, int *len, MPI_Datatype *datatype) {
+  assert(*datatype == MPI_INT);
+  for (int i = 0; i < *len; ++i)
+    ((int *)inoutvec)[i] += ((int *)invec)[i];
+}
+
 int main(int argc, char **argv) {
   int initialized, finalized;
   MPI_Initialized(&initialized);
@@ -77,6 +83,17 @@ int main(int argc, char **argv) {
     int ivalue = rank;
     MPI_Bcast(&ivalue, 1, MPI_INT, 0, MPI_COMM_WORLD);
     assert(ivalue == 0);
+  }
+
+  {
+    MPI_Op op_add;
+    MPI_Op_create(add, 1, &op_add);
+    int ivalue = 1;
+    int isum;
+    MPI_Allreduce(&ivalue, &isum, 1, MPI_INT, op_add, MPI_COMM_WORLD);
+    assert(ivalue == 1);
+    assert(isum == size);
+    MPI_Op_free(&op_add);
   }
 
   MPI_Finalize();
