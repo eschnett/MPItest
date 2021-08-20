@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 void add(void *invec, void *inoutvec, int *len, MPI_Datatype *datatype) {
+  fprintf(stderr, "Calling add\n");
   assert(*datatype == MPI_INT);
   for (int i = 0; i < *len; ++i)
     ((int *)inoutvec)[i] += ((int *)invec)[i];
@@ -31,10 +32,9 @@ int main(int argc, char **argv) {
   {
     int isend = 42;
     int irecv = -1;
-    MPI_Send(&isend, 1, MPI_INT, (rank + 1) % size, 0, MPI_COMM_WORLD);
     MPI_Status status;
-    MPI_Recv(&irecv, 1, MPI_INT, (rank + size - 1) % size, 0, MPI_COMM_WORLD,
-             &status);
+    MPI_Sendrecv(&isend, 1, MPI_INT, (rank + 1) % size, 0, &irecv, 1, MPI_INT,
+                 (rank + size - 1) % size, 0, MPI_COMM_WORLD, &status);
     assert(isend == 42);
     assert(irecv == 42);
     assert(status.MPI_SOURCE == (rank + size - 1) % size);

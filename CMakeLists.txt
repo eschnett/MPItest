@@ -22,12 +22,14 @@ env MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.
 
 
 
-export PATH=$HOME/src/spack/opt/spack/linux-ubuntu18.04-skylake_avx512/gcc-11.2.0/cmake-3.21.1-ztbpwc6mr65mqagnikcuuiifn3ox6btv/bin:$PATH
+module load cmake
 rm -rf build $HOME/src/c/MPIstuff/mpitest
 cmake -S . -B build -DCMAKE_C_COMPILER=gcc-9 -DCMAKE_CXX_COMPILER=g++-9 -DCMAKE_Fortran_COMPILER=gfortran -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest
 cmake --build build && cmake --install build
 
 env MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.so /cm/shared/apps/openmpi/gcc-9/64/4.1.0/bin/mpiexec -n 4 --oversubscribe -mca oob_tcp_if_include lo --mca btl self,vader $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-c
+
+env MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so /cm/shared/apps/mpich/gcc-9//3.3.2/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-c
 
 env MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-intel/lib/libmpiwrapper.so /cm/shared/apps/intel/mpi/2021.1.1/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-c
 ]]
