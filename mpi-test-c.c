@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 void add(void *invec, void *inoutvec, int *len, MPI_Datatype *datatype) {
-  fprintf(stderr, "Calling add\n");
   assert(*datatype == MPI_INT);
   for (int i = 0; i < *len; ++i)
     ((int *)inoutvec)[i] += ((int *)invec)[i];
