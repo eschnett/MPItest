@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
     assert(count == 1);
     if (rank == 0) {
       printf("sent: %d, received: %d\n", isend, irecv);
-      printf("source: %d, tag: %d, error: %d, count: %d\n", status.MPI_SOURCE,
-             status.MPI_TAG, status.MPI_ERROR, count);
+      printf("source: %d, tag: %d, count: %d\n", status.MPI_SOURCE,
+             status.MPI_TAG, count);
     }
   }
 
