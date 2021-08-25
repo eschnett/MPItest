@@ -33,7 +33,7 @@ jobs:
       run: |
         git clone https://github.com/eschnett/MPItrampoline
         cd MPItrampoline
-        git checkout ${{mpitrampoline}}
+        git checkout ${{matrix.mpitrampoline}}
         cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
@@ -93,7 +93,7 @@ jobs:
         sudo apt-get install ${packages}
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
-        git checkout ${{mpiwrapper}}
+        git checkout ${{matrix.mpiwrapper}}
         cmake -B ${{github.workspace}}/MPIwrapper/build \
             -DCMAKE_CXX_COMPILER=mpicxx \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
