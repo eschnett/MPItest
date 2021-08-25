@@ -13,12 +13,13 @@ jobs:
   build:
     strategy:
       matrix:
+        # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems
         # TODO: Test on MacOS (our shared library handling on MacOS is broken...), Windows
-        mpiwrapper: [4cf9d5652ccfcff0d00bad6bb7f79e0250502bcf]
-        mpitrampoline: [6bfdc95e896055d8ea2b9f27e2d9125a2b68e718]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpi: [MPICH, OpenMPI]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        mpitrampoline: [76ee6f0cdfeac5a23a7e8a43f3b4f7ceeb933c3c]
+        mpiwrapper: [4cf9d5652ccfcff0d00bad6bb7f79e0250502bcf]
 
     # The CMake configure and build commands are platform agnostic and
     # should work equally well on Windows or Mac. You can convert this
