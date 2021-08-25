@@ -100,53 +100,59 @@ jobs:
     - name: Test C ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-c
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-cxx
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
 
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
 
     - name: Test Fortran 90 mpif ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
 
     - name: Test Fortran 90 mpi ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
 
     - name: Test Fortran 90 mpi_f08 ${{matrix.mpi}}
       run: |
         case "${{matrix.mpi}}" in
-            MPICH) mpiexec='mpiexec';;
-            OpenMPI) mpiexec='mpiexec --oversubscribe';;
+            MPICH) mpiexec_options='mpiexec';;
+            OpenMPI) mpiexec_options='mpiexec --oversubscribe';;
         esac
+        export MPITRAMPOLINE_MPIEXEC=mpiexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ${mpiexec} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
