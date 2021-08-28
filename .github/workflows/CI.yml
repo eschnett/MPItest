@@ -18,8 +18,8 @@ jobs:
         # TODO: Test on MacOS (our shared library handling on MacOS is broken...), Windows
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [2c2c6f0d462c4ff423a87bc72782116a6d1c8dbb]
-        mpiwrapper: [185f4812d01f9a9fcc0194c8e7d40a06b81a3348]
+        mpitrampoline: [514db8d33de6ba7fde5e44c633d3c1f6f3605e35]
+        mpiwrapper: [bf19e622c5ada24b468f7e21613c08a323819202]
 
     # The CMake configure and build commands are platform agnostic and
     # should work equally well on Windows or Mac. You can convert this

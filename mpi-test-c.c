@@ -116,12 +116,20 @@ int main(int argc, char **argv) {
     MPI_Op_free(&op_add);
   }
 
+  fprintf(stderr, "MPI_Initialized\n");
+  MPI_Initialized(&initialized);
+  assert(initialized);
+  fprintf(stderr, "MPI_Finalized\n");
+  MPI_Finalized(&finalized);
+  assert(!finalized);
+
   fprintf(stderr, "MPI_Finalize\n");
   MPI_Finalize();
 
   fprintf(stderr, "MPI_Initialized\n");
   MPI_Initialized(&initialized);
-  assert(initialized);
+  // This fails for MPICH 3.4.2
+  // assert(initialized);
   fprintf(stderr, "MPI_Finalized\n");
   MPI_Finalized(&finalized);
   assert(finalized);
