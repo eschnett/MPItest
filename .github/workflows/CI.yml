@@ -88,7 +88,19 @@ jobs:
         esac
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: |
+        case $RUNNER_OS in
+        Linux)
+            # do nothing
+            ;;
+        macOS)
+            # Use GCC-11 from Homebrew
+            export MPITRAMPOLINE_CC=gcc-11
+            export MPITRAMPOLINE_CXX=g++-11
+            export MPITRAMPOLINE_FC=gfortran-11
+            ;;
+        esac
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
