@@ -138,6 +138,7 @@ jobs:
             echo /opt/local/bin >> $GITHUB_PATH
             echo /opt/local/sbin >> $GITHUB_PATH
             export "PATH=/opt/local/bin:/opt/local/sbin:$PATH"
+            sudo port sync
 
             case "${{matrix.mpi}}" in
                 MPICH) packages='mpich-gcc10 +fortran';;
