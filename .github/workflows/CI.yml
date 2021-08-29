@@ -223,7 +223,7 @@ jobs:
       run: |
         # Skip Fortran tests with MPICH on macOS; they are known to fail
         if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            # do nothing
+            :   # do nothing
         else
             case "${{matrix.mpi}}" in
                 MPICH) mpiexec_options='';;
@@ -238,7 +238,7 @@ jobs:
       run: |
         # Skip Fortran tests with MPICH on macOS; they are known to fail
         if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            # do nothing
+            :   # do nothing
         else
             case "${{matrix.mpi}}" in
                 MPICH) mpiexec_options='';;
@@ -253,7 +253,7 @@ jobs:
       run: |
         # Skip Fortran tests with MPICH on macOS; they are known to fail
         if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            # do nothing
+            :   # do nothing
         else
             case "${{matrix.mpi}}" in
                 MPICH) mpiexec_options='';;
@@ -268,7 +268,7 @@ jobs:
       run: |
         # Skip Fortran tests with MPICH on macOS; they are known to fail
         if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            # do nothing
+            :   # do nothing
         else
             case "${{matrix.mpi}}" in
                 MPICH) mpiexec_options='';;
