@@ -20,7 +20,7 @@ jobs:
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpitrampoline: [8a65abdb7ba3eac8782e77d7f479e1f449437e90]
-        mpiwrapper: [a0953c97334d29ff458e5ca4f54a6d645f2cbe30]
+        mpiwrapper: [74ff0c58c8f513bbd5ba0374844c22a8bc002173]
 
     runs-on: ${{matrix.os}}
 
@@ -42,7 +42,7 @@ jobs:
             export FC=gfortran-11
             ;;
         esac
-        cmake -S . -B ${{github.workspace}}/build \
+        cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
@@ -137,7 +137,7 @@ jobs:
         git checkout ${{matrix.mpiwrapper}}
         case $RUNNER_OS in
         Linux)
-            cmake -B ${{github.workspace}}/MPIwrapper/build \
+            cmake -S . -B buile \
                 -DCMAKE_CXX_COMPILER=mpicxx \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
@@ -152,7 +152,7 @@ jobs:
                 # in `libmpiwrapper.so` would at run-time be resolved
                 # to MPItrampoline instead of MPICH, leading to an
                 # infinite recursion, stack overflow, and segfault.
-                cmake -B ${{github.workspace}}/build \
+                cmake -S . -B build \
                     -DCMAKE_CXX_COMPILER=g++-mp-10 \
                     -DCMAKE_Fortran_COMPILER=gfortran-mp-10 \
                     -DMPI_CXX_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
@@ -165,23 +165,22 @@ jobs:
                     -DMPI_pmpi_LIBRARY=/opt/local/lib/mpich-gcc10/libpmpi.dylib \
                     -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-mpich-gcc10 \
                     -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                    -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}} || true
+                    -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
                 ;;
             OpenMPI)
                 # The compiler wrappers have non-standard names
-                cmake -B ${{github.workspace}}/build \
+                cmake -S . -B build \
                     -DCMAKE_CXX_COMPILER=mpicxx-openmpi-gcc11 \
                     -DCMAKE_Fortran_COMPILER=mpifort-openmpi-gcc11 \
                     -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-openmpi-gcc11 \
                     -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                    -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}} || true
+                    -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
                 ;;
             esac
             ;;
         esac
-
-        cmake --build ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
-        cmake --install ${{github.workspace}}/MPIwrapper/build --config ${{env.BUILD_TYPE}}
+        cmake --build build --config ${{env.BUILD_TYPE}}
+        cmake --install build --config ${{env.BUILD_TYPE}}
 
     - name: Test C ${{matrix.mpi}}
       run: |
