@@ -27,6 +27,13 @@ env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapper-m
 env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpi-f90
 env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpi_f08-f90
 
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-c
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-cxx
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpif-f
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpif-f90
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpi-f90
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/bin/mpiwrapper-mpiexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich-twolevel/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-mpi_f08-f90
+
 
 
 module load cmake
