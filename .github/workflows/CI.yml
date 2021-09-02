@@ -208,6 +208,11 @@ jobs:
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        ldd $HOME/mpitest/bin/mpi-test-c
+        ldd $MPITRAMPOLINE_LIB
+        ulimit -c unlimited
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 1 $HOME/mpitest/bin/mpi-test-c || true
+        gdb $HOME/mpitest/bin/mpi-test-c core.*
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
