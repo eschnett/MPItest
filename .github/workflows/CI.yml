@@ -14,12 +14,12 @@ jobs:
     strategy:
       matrix:
         # The order of these definition matters for the web output
-        # TODO: Test on 32-bit systems
+        # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [618636061368b4fd72f18764c35947ad106dcc4e]
+        mpitrampoline: [fc160cc3e1eb2b72e8c72eb0b97343d76375a130]
         mpiwrapper: [f9569af922e80f282e17a9cb88b84d5bd8e5088a]
 
     runs-on: ${{matrix.os}}
