@@ -16,13 +16,14 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        #TODO os: [ubuntu-20.04, macos-11]
-        os: [ubuntu-20.04]
+        os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
-        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        findmpi: [MPIEXEC_EXECUTABLE]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpitrampoline: [457895cd7f8e2ac8c8b019f0278f73ed5608dea1]
         mpiwrapper: [0a5d1a63b8b58ccf6ca8d99010b6a4e9c56053ec]
+        exclude:
+          - os: ubuntu-20.04
+            mpi: OpenMPI
 
     runs-on: ${{matrix.os}}
 
@@ -121,8 +122,6 @@ jobs:
                 OpenMPI) packages=libopenmpi-dev;;
             esac
             sudo apt-get install ${packages}
-            # TODO
-            sudo apt-get install gdb
             ;;
         macOS)
             # The MacPorts MPICH doesn't have the `mpi-f08` Fortran
@@ -212,11 +211,6 @@ jobs:
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-        ldd $HOME/mpitest/bin/mpi-test-c
-        ldd $MPITRAMPOLINE_LIB
-        ulimit -c unlimited
-        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 1 $HOME/mpitest/bin/mpi-test-c || true
-        gdb $HOME/mpitest/bin/mpi-test-c core.*
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
@@ -225,6 +219,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
@@ -239,6 +234,7 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
@@ -254,6 +250,7 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
@@ -269,6 +266,7 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
@@ -284,6 +282,7 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
