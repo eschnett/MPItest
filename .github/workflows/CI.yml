@@ -205,6 +205,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
