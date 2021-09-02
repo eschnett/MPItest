@@ -22,7 +22,7 @@ jobs:
         #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         findmpi: [MPIEXEC_EXECUTABLE]
         mpitrampoline: [457895cd7f8e2ac8c8b019f0278f73ed5608dea1]
-        mpiwrapper: [1aba144c8b0154ac1101152b0fd25e0f4a421039]
+        mpiwrapper: [0a5d1a63b8b58ccf6ca8d99010b6a4e9c56053ec]
 
     runs-on: ${{matrix.os}}
 
