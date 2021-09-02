@@ -19,7 +19,7 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [457895cd7f8e2ac8c8b019f0278f73ed5608dea1]
+        mpitrampoline: [238c1ee93cb3ea7672dad5029f6d27cae49bf317]
         mpiwrapper: [0a5d1a63b8b58ccf6ca8d99010b6a4e9c56053ec]
         exclude:
           - os: ubuntu-20.04
@@ -209,6 +209,7 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
@@ -220,6 +221,7 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
@@ -235,6 +237,7 @@ jobs:
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
             export MPITRAMPOLINE_VERBOSE=1
+            export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
@@ -251,6 +254,7 @@ jobs:
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
             export MPITRAMPOLINE_VERBOSE=1
+            export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
@@ -267,6 +271,7 @@ jobs:
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
             export MPITRAMPOLINE_VERBOSE=1
+            export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
@@ -283,6 +288,7 @@ jobs:
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
             export MPITRAMPOLINE_VERBOSE=1
+            export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
