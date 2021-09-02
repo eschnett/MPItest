@@ -16,9 +16,11 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        os: [ubuntu-20.04, macos-11]
+        #TODO os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04]
         mpi: [MPICH, OpenMPI]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        findmpi: [MPIEXEC_EXECUTABLE]
         mpitrampoline: [457895cd7f8e2ac8c8b019f0278f73ed5608dea1]
         mpiwrapper: [7e97ba65fcd70fdd84c0df56d0fc089b61048a23]
 
@@ -119,6 +121,8 @@ jobs:
                 OpenMPI) packages=libopenmpi-dev;;
             esac
             sudo apt-get install ${packages}
+            # TODO
+            sudo apt-get install gdb
             ;;
         macOS)
             # The MacPorts MPICH doesn't have the `mpi-f08` Fortran
