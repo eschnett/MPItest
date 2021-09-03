@@ -19,11 +19,8 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [9fa9fa4d9e2e98c4931731924f53d41d8a55de77]
-        mpiwrapper: [0a5d1a63b8b58ccf6ca8d99010b6a4e9c56053ec]
-        # exclude:
-        #   - os: ubuntu-20.04
-        #     mpi: OpenMPI
+        mpitrampoline: [870492b89cd25468e5c720c88e0a895676e61489]
+        mpiwrapper: [730db8c88eb9f0875ac78cc90a260ccac9e92f33]
 
     runs-on: ${{matrix.os}}
 
@@ -212,7 +209,7 @@ jobs:
             export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_DLOPEN_BINDING=now
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
@@ -227,87 +224,67 @@ jobs:
             export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_DLOPEN_BINDING=now
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
 
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
       run: |
-        # Skip Fortran tests with MPICH on macOS; they are known to fail
-        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            :   # do nothing
-        else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            fi
-            export MPITRAMPOLINE_VERBOSE=1
-            export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
+        export MPITRAMPOLINE_VERBOSE=1
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
 
     - name: Test Fortran 90 mpif ${{matrix.mpi}}
       run: |
-        # Skip Fortran tests with MPICH on macOS; they are known to fail
-        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            :   # do nothing
-        else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            fi
-            export MPITRAMPOLINE_VERBOSE=1
-            export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
+        export MPITRAMPOLINE_VERBOSE=1
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
 
     - name: Test Fortran 90 mpi ${{matrix.mpi}}
       run: |
-        # Skip Fortran tests with MPICH on macOS; they are known to fail
-        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            :   # do nothing
-        else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            fi
-            export MPITRAMPOLINE_VERBOSE=1
-            export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
+        export MPITRAMPOLINE_VERBOSE=1
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
 
     - name: Test Fortran 90 mpi_f08 ${{matrix.mpi}}
       run: |
-        # Skip Fortran tests with MPICH on macOS; they are known to fail
-        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-            :   # do nothing
-        else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            fi
-            export MPITRAMPOLINE_VERBOSE=1
-            export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
         fi
+        export MPITRAMPOLINE_VERBOSE=1
+        # export MPITRAMPOLINE_DLOPEN_BINDING=now
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
