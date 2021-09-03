@@ -208,6 +208,9 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+        fi
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
@@ -220,6 +223,9 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+        fi
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
@@ -236,6 +242,9 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+            fi
             export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
@@ -253,6 +262,9 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+            fi
             export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
@@ -270,6 +282,9 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+            fi
             export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
@@ -287,6 +302,9 @@ jobs:
                 MPICH) mpiexec_options='';;
                 OpenMPI) mpiexec_options='--oversubscribe';;
             esac
+            if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
+                export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+            fi
             export MPITRAMPOLINE_VERBOSE=1
             export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
