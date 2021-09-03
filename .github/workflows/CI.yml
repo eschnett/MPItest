@@ -231,7 +231,7 @@ jobs:
 
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
       run: |
-        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = MPICH ]; then
+        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
             : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
         else
             case "${{matrix.mpi}}" in
@@ -250,7 +250,7 @@ jobs:
 
     - name: Test Fortran 90 mpif ${{matrix.mpi}}
       run: |
-        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = MPICH ]; then
+        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
             : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
         else
             case "${{matrix.mpi}}" in
@@ -269,7 +269,7 @@ jobs:
 
     - name: Test Fortran 90 mpi ${{matrix.mpi}}
       run: |
-        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = MPICH ]; then
+        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
             : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
         else
             case "${{matrix.mpi}}" in
@@ -288,7 +288,7 @@ jobs:
 
     - name: Test Fortran 90 mpi_f08 ${{matrix.mpi}}
       run: |
-        if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = MPICH ]; then
+        if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
             : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
         else
             case "${{matrix.mpi}}" in
