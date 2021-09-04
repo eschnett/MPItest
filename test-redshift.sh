@@ -111,6 +111,8 @@ export MPITRAMPOLINE_LIB="$path/local/mpiwrapper/lib/libmpiwrapper.so"
 # export MPITRAMPOLINE_DLOPEN_MODE=dlopen
 # export MPITRAMPOLINE_DLOPEN_BINDING=now
 
+export MPITEST_COMM_WORLD_SIZE=4
+
 for exe in                                              \
     "$path/local/mpitest/bin/mpi-test-c"                \
     "$path/local/mpitest/bin/mpi-test-cxx"              \
