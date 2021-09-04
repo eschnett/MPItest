@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
               "  Expected: %d\n"
               "  Found: %d\n",
               comm_world_size, size);
-      MPI_Abort(MPI_COMM_WORLD, 1, ierror);
+      MPI_Abort(MPI_COMM_WORLD, 1);
     }
   }
 
