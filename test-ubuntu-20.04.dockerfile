@@ -1,7 +1,8 @@
 # This Dockerfile is for debugging the CI setup
-# First: `docker build . --tag mpitest`
+# First: `docker build --file test-ubuntu-20.04.dockerfile --tag mpitest .`
 # Then maybe: `docker run -it mpitest`
 
+# TODO: Use Debian Testing?
 FROM ubuntu:20.04
 
 RUN mkdir /cactus

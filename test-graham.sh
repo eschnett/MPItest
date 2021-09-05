@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Test MPItrampoline on Symmetry, Perimeter's HPC system
-# $ rsync -P test-symmetry.sh symmetry:
+# Test MPItrampoline on Graham, a Compute Canada HPC system
+# $ rsync -P test-graham.sh graham.computecanada.ca:
 
 set -euxo pipefail
 
@@ -11,10 +11,12 @@ mkdir "$path"
 cd "$path"
 mkdir "$path/local"
 
-# Prepare
-module load cmake
-
 (
+# Prepare
+module unload intel
+module load gcc/10.3.0
+module unload openmpi
+
 # Install MPItrampoline
 rm -rf "$path/MPItrampoline"
 git clone https://github.com/eschnett/MPItrampoline
@@ -40,60 +42,16 @@ cd "$path"
 )
 
 # Install MPIwrapper
+case intel/2020.1.217 in
 
-# Ubuntu OpenMPI 2.1.1
-# -DCMAKE_CXX_COMPILER=/usr/bin/mpic++
-# -DCMAKE_Fortran_COMPILER=/usr/bin/mpifort
-
-# Intel MPI 2021.1.1
-# module load mpi
-# -DCMAKE_CXX_COMPILER=/cm/shared/apps/intel/mpi/2021.1.1/bin/mpicxx
-# -DCMAKE_Fortran_COMPILER=/cm/shared/apps/intel/mpi/2021.1.1/bin/mpifc
-
-case OpenMPI in
-
-    MPICH)
-        # ES: I don't know whether this uses Infiniband or not.
-        MPITEST_MODULES='mpich/gcc-9/3.3.2'
-        MPITEST_CMAKE_OPTIONS='-DMPIEXEC_EXECUTABLE=/cm/shared/apps/mpich/gcc-9/3.3.2/bin/mpiexec'
-        MPITEST_SET_ENVVARS=''
-        MPITEST_MPIEXEC_OPTIONS='-verbose -prepend-rank'
-        ;;
-
-    MVAPICH2)
-        # DOES NOT WORK YET
-        # Findings:
-        # - MPITRAMPOLINE_DLOPEN_MODE=dlmopen doesn't work with
-        #   multiple processes; liblzma.so.2 is not found
-        # - MPITRAMPOLINE_DLOPEN_MODE=dlopen leads to a segfault in
-        #   MPI_Init
-        MPITEST_MODULES='mvapich2/gcc/64/2.3.2'
-        MPITEST_CMAKE_OPTIONS='-DMPIEXEC_EXECUTABLE=/cm/shared/apps/mvapich2/gcc/64/2.3.2/bin/mpiexec'
+    intel/2020.1.217)
+        MPITEST_MODULES='intel/2020.1.217'
+        MPITEST_CMAKE_OPTIONS='-DMPIEXEC_EXECUTABLE=/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Compiler/intel2020/openmpi/4.0.3/bin/mpiexec'
         MPITEST_SET_ENVVARS='
             export MPITRAMPOLINE_DLOPEN_MODE=dlopen
+            export OMPI_MCA_btl_base_verbose=100
         '
-        MPITEST_MPIEXEC_OPTIONS='-verbose -prepend-rank'
-        ;;
-
-    OpenMPI)
-        # The output states that "send" uses the "openib" BTL. This is good.
-        MPITEST_MODULES='openmpi/gcc-9/64/4.1.0'
-        MPITEST_CMAKE_OPTIONS="                                                         \
-            -DCMAKE_CXX_COMPILER=/cm/shared/apps/openmpi/gcc-9/64/4.1.0/bin/mpic++      \
-            -DCMAKE_Fortran_COMPILER=/cm/shared/apps/openmpi/gcc-9/64/4.1.0/bin/mpifort \
-            -DMPIEXEC_EXECUTABLE=/cm/shared/apps/openmpi/gcc-9/64/4.1.0/bin/mpiexec     \
-        "
-        MPITEST_SET_ENVVARS='
-            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            export OMPI_MCA_btl_openib_allow_ib=true
-        '
-        MPITEST_MPIEXEC_OPTIONS="               \
-            -display-allocation                 \
-            -display-map                        \
-            -report-bindings                    \
-            -tag-output                         \
-            -mca btl_base_verbose 100           \
-        "
+        MPITEST_MPIEXEC_OPTIONS=''
         ;;
 
     *)
@@ -118,14 +76,8 @@ cd "$path"
 rm -rf "$path/runtests"
 mkdir "$path/runtests"
 cd "$path/runtests"
-module load slurm
 cat >runtests.sh <<EOF
 #!/bin/bash
-
-# # All but the first scripts exit immediately
-# if [ \$SLURM_PROCID -ne 0 ]; then
-#    exit
-# fi
 
 echo "Starting batch script"
 
@@ -151,10 +103,7 @@ for exe in                                              \
     "$path/local/mpitest/bin/mpi-test-mpi_f08-f90";
 do
     echo "Starting \$exe..."
-    "$path/local/mpitrampoline/bin/mpiexec"     \
-        -n "\$SLURM_NTASKS"                     \
-        $MPITEST_MPIEXEC_OPTIONS                \
-        "\$exe"
+    srun $MPITEST_MPIEXEC_OPTIONS "\$exe"
     echo "Finished \$exe."
 done
 
@@ -165,12 +114,12 @@ chmod a+x runtests.sh
 tail -f runtests.out &
 tail_pid=$!
 sbatch                                          \
+    --account=def-eschnett                      \
     --nodes=2                                   \
     --open-mode=append                          \
     --output=runtests.out                       \
-    --partition=debugq                          \
     --tasks-per-node=2                          \
-    --time=1:0:0                                \
+    --time=0:30:0                               \
     --wait                                      \
     runtests.sh
 sleep 3
