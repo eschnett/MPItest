@@ -19,7 +19,7 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [f8902b05959d131b0f6ba3140d894ceb4680ad97]
+        mpitrampoline: [f28fc86e9b7ccbebc4ec3eee2d684b85f0057582]
         mpiwrapper: [2ab9f22d99cfb027f32a6a6a232311fa548e74aa]
 
     runs-on: ${{matrix.os}}
