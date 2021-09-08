@@ -1,8 +1,6 @@
 # This Dockerfile is for debugging the CI setup
-# First: `docker build --file test-i386-debian-11.0.dockerfile --tag mpitest .`
-# Then maybe: `docker run -it mpitest`
+#  `docker build --file test-i386-debian-11.0.dockerfile .`
 
-# TODO: Use Debian Testing instead?
 FROM i386/debian:11.0
 
 RUN mkdir /cactus
@@ -26,7 +24,6 @@ RUN apt-get update && \
 RUN git clone https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
 RUN mkdir build
-RUN cmake  --version
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/root/mpitrampoline

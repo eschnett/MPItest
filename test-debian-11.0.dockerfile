@@ -1,6 +1,5 @@
 # This Dockerfile is for debugging the CI setup
-# First: `docker build --file test-debian-11.0.dockerfile --tag mpitest .`
-# Then maybe: `docker run -it mpitest`
+# `docker build --file test-debian-11.0.dockerfile .`
 
 FROM debian:11.0
 
