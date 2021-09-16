@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const char *const MPITRAMPOLINE_VERBOSE = NULL;
+
 void add(void *invec, void *inoutvec, int *len, MPI_Datatype *datatype) {
   assert(*datatype == MPI_INT);
   for (int i = 0; i < *len; ++i)
