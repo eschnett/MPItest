@@ -6,6 +6,12 @@
 
 const char *const MPITRAMPOLINE_VERBOSE = NULL;
 
+// const char *const MPITRAMPOLINE_VERBOSE = "1";
+// const char *const MPITRAMPOLINE_PRELOAD =
+//     "/usr/lib/libSystem.B.dylib:@MPITRAMPOLINE_DIR@/lib/libmpiwrapper.so";
+// const char *const MPITRAMPOLINE_LIB =
+//     "/Users/eschnett/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.so";
+
 void add(void *invec, void *inoutvec, int *len, MPI_Datatype *datatype) {
   assert(*datatype == MPI_INT);
   for (int i = 0; i < *len; ++i)
