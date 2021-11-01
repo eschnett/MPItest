@@ -1,7 +1,7 @@
-# This Dockerfile is for debugging the CI setup
-# Run `docker build --file test-ubuntu-20.04.dockerfile .`
+# Test MPItrampoline on various CPU architectures
+# Run `docker build --file test-arm32v5-debian-mpich.dockerfile .`
 
-FROM ubuntu:20.04
+FROM arm32v5/debian:11.1
 
 RUN mkdir /cactus
 WORKDIR /cactus
@@ -23,6 +23,7 @@ RUN apt-get update && \
 # Install MPItrampoline
 RUN git clone https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
+RUN mkdir build
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/root/mpitrampoline
@@ -33,6 +34,7 @@ WORKDIR /cactus
 # Install MPItest
 RUN git clone https://github.com/eschnett/MPItest
 WORKDIR /cactus/MPItest
+RUN mkdir build
 RUN cmake -S . -B build \
         -DMPIEXEC_EXECUTABLE=/root/mpitrampoline/bin/mpiexec \
         -DCMAKE_BUILD_TYPE=Debug \
@@ -43,9 +45,9 @@ WORKDIR /cactus
 
 # Install MPIwrapper
 RUN apt-get --yes --no-install-recommends install libmpich-dev
-# RUN apt-get --yes --no-install-recommends install libopenmpi-dev
 RUN git clone https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
+RUN mkdir build
 RUN cmake -S . -B build \
         -DCMAKE_CXX_COMPILER=mpicxx \
         -DCMAKE_BUILD_TYPE=Debug \
@@ -55,9 +57,8 @@ RUN cmake --install build
 
 # Test MPIwrapper
 ENV mpiexec_options=''
-# ENV mpiexec_options='--oversubscribe --allow-run-as-root'
 ENV MPITRAMPOLINE_VERBOSE=1
-ENV MPITRAMPOLINE_DLOPEN_MODE=dlmopen
+ENV MPITRAMPOLINE_DLOPEN_MODE=dlopen
 ENV MPITRAMPOLINE_DLOPEN_BINDING=now
 ENV MPITRAMPOLINE_MPIEXEC=/root/mpiwrapper/bin/mpiwrapperexec
 ENV MPITRAMPOLINE_LIB=/root/mpiwrapper/lib/libmpiwrapper.so

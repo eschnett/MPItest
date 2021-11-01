@@ -1,7 +1,7 @@
 # This Dockerfile is for debugging the CI setup
-# Run `docker build --file test-ubuntu-20.04.dockerfile .`
+# Run `docker build --file test-amd64-debian-mpich.dockerfile .`
 
-FROM ubuntu:20.04
+FROM amd64/debian:11.1
 
 RUN mkdir /cactus
 WORKDIR /cactus
@@ -21,7 +21,7 @@ RUN apt-get update && \
         wget
 
 # Install MPItrampoline
-RUN git clone https://github.com/eschnett/MPItrampoline
+RUN git clone -b eschnett/mpifort https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
@@ -43,7 +43,6 @@ WORKDIR /cactus
 
 # Install MPIwrapper
 RUN apt-get --yes --no-install-recommends install libmpich-dev
-# RUN apt-get --yes --no-install-recommends install libopenmpi-dev
 RUN git clone https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
 RUN cmake -S . -B build \
@@ -55,9 +54,8 @@ RUN cmake --install build
 
 # Test MPIwrapper
 ENV mpiexec_options=''
-# ENV mpiexec_options='--oversubscribe --allow-run-as-root'
 ENV MPITRAMPOLINE_VERBOSE=1
-ENV MPITRAMPOLINE_DLOPEN_MODE=dlmopen
+ENV MPITRAMPOLINE_DLOPEN_MODE=dlopen
 ENV MPITRAMPOLINE_DLOPEN_BINDING=now
 ENV MPITRAMPOLINE_MPIEXEC=/root/mpiwrapper/bin/mpiwrapperexec
 ENV MPITRAMPOLINE_LIB=/root/mpiwrapper/lib/libmpiwrapper.so

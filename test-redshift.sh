@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test MPItrampoline on Redshift, and macOS laptop
+# Test MPItrampoline on Redshift, a macOS laptop
 
 set -euxo pipefail
 

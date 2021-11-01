@@ -1,7 +1,7 @@
-# This Dockerfile is for debugging the CI setup
-# First: `docker build --file test-arm64v8-debian.dockerfile .`
+# Test MPItrampoline on various CPU architectures
+# Run `docker build --file test-mips64le-debian-mpich.dockerfile .`
 
-FROM arm64v8/debian
+FROM mips64le/debian:11.1
 
 RUN mkdir /cactus
 WORKDIR /cactus
@@ -45,7 +45,6 @@ WORKDIR /cactus
 
 # Install MPIwrapper
 RUN apt-get --yes --no-install-recommends install libmpich-dev
-# RUN apt-get --yes --no-install-recommends install libopenmpi-dev
 RUN git clone https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
 RUN mkdir build
@@ -58,15 +57,14 @@ RUN cmake --install build
 
 # Test MPIwrapper
 ENV mpiexec_options=''
-# ENV mpiexec_options='--oversubscribe --allow-run-as-root'
 ENV MPITRAMPOLINE_VERBOSE=1
-ENV MPITRAMPOLINE_DLOPEN_MODE=dlmopen
+ENV MPITRAMPOLINE_DLOPEN_MODE=dlopen
 ENV MPITRAMPOLINE_DLOPEN_BINDING=now
 ENV MPITRAMPOLINE_MPIEXEC=/root/mpiwrapper/bin/mpiwrapperexec
 ENV MPITRAMPOLINE_LIB=/root/mpiwrapper/lib/libmpiwrapper.so
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-c
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-cxx
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpif-f
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpif-f90
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpi-f90
-# RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpi_f08-f90
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-c
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-cxx
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpif-f
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpif-f90
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpi-f90
+RUN /root/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 /root/mpitest/bin/mpi-test-mpi_f08-f90

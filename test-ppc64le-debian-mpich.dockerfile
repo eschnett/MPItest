@@ -1,7 +1,7 @@
-# This Dockerfile is for debugging the CI setup
-#  `docker build --file test-i386-debian-11.0.dockerfile .`
+# Test MPItrampoline on various CPU architectures
+# Run `docker build --file test-ppc64le-debian-mpich.dockerfile .`
 
-FROM i386/debian:11.0
+FROM ppc64le/debian:11.1
 
 RUN mkdir /cactus
 WORKDIR /cactus
@@ -45,7 +45,6 @@ WORKDIR /cactus
 
 # Install MPIwrapper
 RUN apt-get --yes --no-install-recommends install libmpich-dev
-# RUN apt-get --yes --no-install-recommends install libopenmpi-dev
 RUN git clone https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
 RUN mkdir build
@@ -58,9 +57,8 @@ RUN cmake --install build
 
 # Test MPIwrapper
 ENV mpiexec_options=''
-# ENV mpiexec_options='--oversubscribe --allow-run-as-root'
 ENV MPITRAMPOLINE_VERBOSE=1
-ENV MPITRAMPOLINE_DLOPEN_MODE=dlmopen
+ENV MPITRAMPOLINE_DLOPEN_MODE=dlopen
 ENV MPITRAMPOLINE_DLOPEN_BINDING=now
 ENV MPITRAMPOLINE_MPIEXEC=/root/mpiwrapper/bin/mpiwrapperexec
 ENV MPITRAMPOLINE_LIB=/root/mpiwrapper/lib/libmpiwrapper.so
