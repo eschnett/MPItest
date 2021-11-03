@@ -21,7 +21,7 @@ RUN apt-get update && \
         wget
 
 # Install MPItrampoline
-RUN git clone -b eschnett/mpifort https://github.com/eschnett/MPItrampoline
+RUN git clone https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
