@@ -110,6 +110,29 @@ int main(int argc, char **argv) {
     assert(count == 1);
   }
 
+  {
+    int isend = 42;
+    int irecv = -1;
+    MPI_Request sreq;
+    fprintf(stderr, "MPI_Isend\n");
+    MPI_Isend(&isend, 1, MPI_INT, (rank + 1) % size, 0, MPI_COMM_WORLD, &sreq);
+    MPI_Request rreq;
+    fprintf(stderr, "MPI_Irecv\n");
+    MPI_Irecv(&irecv, 1, MPI_INT, (rank + size - 1) % size, 0, MPI_COMM_WORLD,
+              &rreq);
+    MPI_Request reqs[2] = {rreq, sreq};
+    MPI_Status stats[2];
+    int flag;
+    fprintf(stderr, "MPI_Testall\n");
+    MPI_Testall(2, reqs, &flag, stats);
+    fprintf(stderr, "MPI_Testall\n");
+    MPI_Testall(2, reqs, &flag, MPI_STATUSES_IGNORE);
+    fprintf(stderr, "MPI_Waitall\n");
+    MPI_Waitall(2, reqs, stats);
+    fprintf(stderr, "MPI_Waitall\n");
+    MPI_Waitall(2, reqs, MPI_STATUSES_IGNORE);
+  }
+
   struct float5 {
     float elts[5];
   };
