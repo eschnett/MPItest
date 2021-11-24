@@ -47,6 +47,8 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
+        #TODO
+        cat $HOME/mpitrampoline/bin/mpicc
 
     - name: Configure
       run: |
