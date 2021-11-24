@@ -19,8 +19,8 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [9c5c574db0265af4394917519d8a68abb005ba89]
-        mpiwrapper: [b129b76b91befef756f228614fc675c19b66c58f]
+        mpitrampoline: [7f4be7735744eca2276d90800c8babc28dd29978]
+        mpiwrapper: [529814f47dd6dbfad30c12a1719dd457d38230f0]
 
     runs-on: ${{matrix.os}}
 
@@ -47,13 +47,6 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
-        #TODO
-        echo $HOME/mpitrampoline/bin/mpicc
-        cat $HOME/mpitrampoline/bin/mpicc
-        echo $HOME/mpitrampoline/bin/mpicxx
-        cat $HOME/mpitrampoline/bin/mpicxx
-        echo $HOME/mpitrampoline/bin/mpifc
-        cat $HOME/mpitrampoline/bin/mpifc
 
     - name: Configure
       run: |
