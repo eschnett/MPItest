@@ -304,5 +304,9 @@ jobs:
             # export MPITRAMPOLINE_DLOPEN_BINDING=now
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+            #TODO vvv
+            ldd $HOME/mpitest/bin/mpi-test-mpi-f90
+            ldd $HOME/mpitest/bin/mpi-test-mpi_f08-f90
+            #TODO ^^^
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
         fi
