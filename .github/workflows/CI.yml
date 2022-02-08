@@ -19,6 +19,7 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        shared: [OFF, ON]
         mpitrampoline: [ef71a3eea2a2734377352783dd13bbce261fa2fe]
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
 
@@ -44,6 +45,7 @@ jobs:
         esac
         cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DBUILD_SHARED_LIBS=${{matrix.shared}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
         cmake --build build
         cmake --install build
