@@ -20,7 +20,7 @@ jobs:
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
-        mpitrampoline: [e090018db133f80c3f100675bb573f59cb8fe254]
+        mpitrampoline: [cd0c6dd21aee14f349f363242854dccbbd6aaf8a]
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
 
     runs-on: ${{matrix.os}}
