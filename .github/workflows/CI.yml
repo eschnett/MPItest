@@ -47,8 +47,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DBUILD_SHARED_LIBS=${{matrix.shared}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
-        cmake --build build
-        cmake --install build
+        cmake --build build --verbose
+        cmake --install build --verbose
 
     - name: Configure
       run: |
@@ -102,14 +102,14 @@ jobs:
             export MPITRAMPOLINE_FC=gfortran-11
             ;;
         esac
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --verbose
 
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Install
-      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --verbose
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
@@ -305,7 +305,9 @@ jobs:
             export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
             export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
             #TODO vvv
+            echo ldd $HOME/mpitest/bin/mpi-test-mpi-f90
             ldd $HOME/mpitest/bin/mpi-test-mpi-f90
+            echo ldd $HOME/mpitest/bin/mpi-test-mpi_f08-f90
             ldd $HOME/mpitest/bin/mpi-test-mpi_f08-f90
             #TODO ^^^
             $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
