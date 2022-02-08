@@ -44,11 +44,12 @@ jobs:
             ;;
         esac
         cmake -S . -B build \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DBUILD_SHARED_LIBS=${{matrix.shared}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
-        cmake --build build --verbose
-        cmake --install build --verbose
+        cmake --build build
+        cmake --install build
 
     - name: Configure
       run: |
@@ -69,18 +70,21 @@ jobs:
         case "${{matrix.findmpi}}" in
         MPIEXEC_EXECUTABLE)
             cmake -B ${{github.workspace}}/build \
+                -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DMPIEXEC_EXECUTABLE=$HOME/mpitrampoline/bin/mpiexec \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
             ;;
         MPI_HOME)
             cmake -B ${{github.workspace}}/build \
+                -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DMPI_HOME=$HOME/mpitrampoline \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
             ;;
         CMAKE_C_COMPILER)
             cmake -B ${{github.workspace}}/build \
+                -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DCMAKE_C_COMPILER=$HOME/mpitrampoline/bin/mpicc \
                 -DCMAKE_CXX_COMPILER=$HOME/mpitrampoline/bin/mpicxx \
                 -DCMAKE_Fortran_COMPILER=$HOME/mpitrampoline/bin/mpifc \
@@ -102,14 +106,14 @@ jobs:
             export MPITRAMPOLINE_FC=gfortran-11
             ;;
         esac
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --verbose
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Install
-      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --verbose
+      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
