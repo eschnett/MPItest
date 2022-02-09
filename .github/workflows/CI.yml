@@ -182,7 +182,7 @@ jobs:
                 -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DCMAKE_C_COMPILER=$HOME/mpitrampoline/bin/mpicc \
                 -DCMAKE_CXX_COMPILER=$HOME/mpitrampoline/bin/mpicxx \
-                -DCMAKE_Fortran_COMPILER=$HOME/mpitrampoline/bin/mpifc \
+                -DCMAKE_Fortran_COMPILER=$HOME/mpitrampoline/bin/mpifort \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
             ;;
@@ -217,7 +217,7 @@ jobs:
             cmake -S . -B build \
                 -DCMAKE_C_COMPILER=mpicc \
                 -DCMAKE_CXX_COMPILER=mpicxx \
-                -DCMAKE_Fortran_COMPILER=mpifc \
+                -DCMAKE_Fortran_COMPILER=mpifort \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
         #     ;;
