@@ -18,8 +18,10 @@ jobs:
         # TODO: Test on Windows
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        shared: [OFF, ON]
+        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        #TODO shared: [OFF, ON]
+        findmpi: [MPIEXEC_EXECUTABLE]
+        shared: [OFF]
         mpitrampoline: [cd0c6dd21aee14f349f363242854dccbbd6aaf8a]
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
 
