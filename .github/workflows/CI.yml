@@ -200,6 +200,8 @@ jobs:
                 export CC=gcc-11
                 export CXX=g++-11
                 export FC=gfortran-11
+                export FFLAGS=-fallow-argument-mismatch
+                export FCFLAGS=-fallow-argument-mismatch
                 ./configure --enable-mpi-fortran=usempif08
                 make -j2
                 make -j2 install
