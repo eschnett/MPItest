@@ -85,6 +85,7 @@ jobs:
                 wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
+                # Use GCC-11 from Homebrew
                 export CC=gcc-11
                 export CXX=g++-11
                 export F77=gfortran-11
@@ -109,6 +110,7 @@ jobs:
                 wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
+                # Use GCC-11 from Homebrew
                 export CC=gcc-11
                 export CXX=g++-11
                 export F77=gfortran-11
@@ -248,6 +250,20 @@ jobs:
 
     - name: Build tests
       run: |
+        case $RUNNER_OS in
+        Linux)
+            # do nothing
+            ;;
+        macOS)
+            # Use GCC-11 from Homebrew
+            export CC=gcc-11
+            export CXX=g++-11
+            export FC=gfortran-11
+            export MPITRAMPOLINE_CC=gcc-11
+            export MPITRAMPOLINE_CXX=g++-11
+            export MPITRAMPOLINE_FC=gfortran-11
+            ;;
+        esac
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install tests
