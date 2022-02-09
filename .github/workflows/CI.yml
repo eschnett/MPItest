@@ -137,6 +137,7 @@ jobs:
         # case $RUNNER_OS in
         # Linux)
             cmake -S . -B build \
+                -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DCMAKE_C_COMPILER=mpicc \
                 -DCMAKE_CXX_COMPILER=mpicxx \
                 -DCMAKE_Fortran_COMPILER=mpifort \
@@ -217,9 +218,6 @@ jobs:
             export CC=gcc-11
             export CXX=g++-11
             export FC=gfortran-11
-            export MPITRAMPOLINE_CC=gcc-11
-            export MPITRAMPOLINE_CXX=g++-11
-            export MPITRAMPOLINE_FC=gfortran-11
             ;;
         esac
         case "${{matrix.findmpi}}" in
