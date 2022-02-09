@@ -238,7 +238,7 @@ jobs:
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
       run: |
         #TODO
-        if [ $RUNNER_OS = macOS -a \( ${{matrix.mpi}} = MPICH -o ${{matrix.findmpi}} = CMAKE_C_COMPILER \) ]; then
+        if [ $RUNNER_OS = macOS -a \( ${{matrix.mpi}} = MPICH -o ${{matrix.findmpi}} = CMAKE_C_COMPILER -o ${{matrix.findmpi}} = MPI_HOME \) ]; then
             : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
         else
             case "${{matrix.mpi}}" in
