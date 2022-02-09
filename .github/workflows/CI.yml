@@ -151,6 +151,8 @@ jobs:
             # esac
             # sudo port install $packages
 
+            brew install gcc
+
             echo 'echo $PATH'
             echo $PATH
             echo /usr/local/bin >> $GITHUB_PATH
