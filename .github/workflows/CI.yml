@@ -169,13 +169,13 @@ jobs:
                 make -j2 install
                 ;;
             OpenMPI)
-                ;;
                 wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
                 ./configure --enable-mpi-fortran=usempif08
                 make -j2
                 make -j2 install
+                ;;
             esac
             ;;
         esac
