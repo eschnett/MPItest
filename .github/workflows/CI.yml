@@ -74,7 +74,7 @@ jobs:
         path: ${{github.workspace}}/mpi
         key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}
 
-    - name: Install ${{matrix.mpi}}
+    - name: Install MPI ${{matrix.mpi}}
       if: steps.cache-mpi.outputs.cache-hit != 'true'
       run: |
         case $RUNNER_OS in
@@ -92,8 +92,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS=-fallow-argument-mismatch'
-                    export FCFLAGS=-fallow-argument-mismatch'
+                    export FFLAGS=-fallow-argument-mismatch
+                    export FCFLAGS=-fallow-argument-mismatch
                     ./configure \
                         --disable-opencl \
                         --enable-threads=multiple \
