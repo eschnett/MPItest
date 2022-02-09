@@ -72,7 +72,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{github.workspace}}/mpi
-        key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}
+        key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}-v2
 
     - name: Install MPI ${{matrix.mpi}}
       if: steps.cache-mpi.outputs.cache-hit != 'true'
@@ -132,11 +132,25 @@ jobs:
                 export CXX=g++-11
                 export F77=gfortran-11
                 export FC=gfortran-11
-                export FFLAGS=-fallow-argument-mismatch
-                export FCFLAGS=-fallow-argument-mismatch
-                ./configure \
-                    --enable-mpi-fortran=usempif08 \
-                    --prefix=${{github.workspace}}/mpi
+                if [ ${{matrix.shared}} = OFF ]; then
+                    # On macOS, MPItrampoline shared libraries work
+                    # only for statically linked MPI libraries.
+                    export CFLAGS='-fPIC -DPIC'
+                    export CXXLAGS='-fPIC -DPIC'
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    ./configure \
+                        --disable-shared \
+                        --enable-mpi-fortran=usempif08 \
+                        --enable-static \
+                        --prefix=${{github.workspace}}/mpi
+                else
+                    export FFLAGS=-fallow-argument-mismatch
+                    export FCFLAGS=-fallow-argument-mismatch
+                    ./configure \
+                        --enable-mpi-fortran=usempif08 \
+                        --prefix=${{github.workspace}}/mpi
+                fi
                 make -j2
                 make -j2 install
                 ;;
