@@ -151,6 +151,14 @@ jobs:
             # esac
             # sudo port install $packages
 
+            echo 'echo $PATH'
+            echo $PATH
+            echo /usr/local/bin >> $GITHUB_PATH
+            echo 'echo $PATH'
+            echo $PATH
+            export PATH="$PATH:/usr/local/bin"
+            echo 'echo $PATH'
+            echo $PATH
             echo which gcc
             which gcc
             echo which g++
