@@ -150,28 +150,6 @@ jobs:
             #     OpenMPI) packages='openmpi-gcc11 +fortran';;
             # esac
             # sudo port install $packages
-
-            echo ls /usr/local/bin
-            ls /usr/local/bin
-            echo ls -l /usr/local/bin
-            ls -l /usr/local/bin
-            echo 'echo $PATH'
-            echo $PATH
-            echo /usr/local/bin >> $GITHUB_PATH
-            echo 'echo $PATH'
-            echo $PATH
-            export PATH="/usr/local/bin:$PATH"
-            echo 'echo $PATH'
-            echo $PATH
-            echo which gcc-11
-            which gcc-11
-            echo which g++-11
-            which g++-11
-            echo which gfortran-11
-            which gfortran-11
-            echo 'echo $PATH'
-            echo $PATH
-
             case ${{matrix.mpi}} in
             MPICH)
                 wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
@@ -180,6 +158,8 @@ jobs:
                 export CC=gcc-11
                 export CXX=g++-11
                 export FC=gfortran-11
+                export FFLAGS=-fallow-argument-mismatch
+                export FCFLAGS=-fallow-argument-mismatch
                 ./configure \
                     --disable-opencl \
                     --enable-threads=multiple \
