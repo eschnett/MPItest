@@ -25,7 +25,6 @@ jobs:
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
         exclude:
           - os: macos-11
-            mpi: OpenMPI
             shared: ON
 
     runs-on: ${{matrix.os}}
