@@ -18,7 +18,8 @@ jobs:
         # TODO: Test on Windows
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        findmpi: [MPIEXEC_EXECUTABLE]
         shared: [OFF, ON]
         mpitrampoline: [cd0c6dd21aee14f349f363242854dccbbd6aaf8a]
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
@@ -71,7 +72,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{github.workspace}}/mpi
-        key: ${{runner.os}}-${{matrix.mpi}}
+        key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}
 
     - name: Install ${{matrix.mpi}}
       if: steps.cache-mpi.outputs.cache-hit != 'true'
@@ -90,13 +91,29 @@ jobs:
                 export CXX=g++-11
                 export F77=gfortran-11
                 export FC=gfortran-11
-                export FFLAGS=-fallow-argument-mismatch
-                export FCFLAGS=-fallow-argument-mismatch
-                ./configure \
-                    --disable-opencl \
-                    --enable-threads=multiple \
-                    --enable-two-level-namespace \
-                    --prefix=${{github.workspace}}/mpi
+                if [ ${{matrix.shared}} = OFF ]; then
+                    export FFLAGS=-fallow-argument-mismatch'
+                    export FCFLAGS=-fallow-argument-mismatch'
+                    ./configure \
+                        --disable-opencl \
+                        --enable-threads=multiple \
+                        --enable-two-level-namespace \
+                        --prefix=${{github.workspace}}/mpi
+                else
+                    # On macOS, MPItrampoline shared libraries work
+                    # only for statically linked MPI libraries.
+                    export CFLAGS='-fPIC -DPIC'
+                    export CXXLAGS='-fPIC -DPIC'
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    ./configure \
+                        --disable-opencl \
+                        --disable-shared \
+                        --enable-static \
+                        --enable-threads=multiple \
+                        --enable-two-level-namespace \
+                        --prefix=${{github.workspace}}/mpi
+                fi
                 # # Remove empty `-l` flags from libtool
                 # # (Why are they there? They should not be.)
                 # # Run the command several times to handle multiple (overlapping) occurrences.
