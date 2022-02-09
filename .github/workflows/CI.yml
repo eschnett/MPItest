@@ -28,6 +28,101 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install system packages
+      run: |
+        case $RUNNER_OS in
+        Linux)
+            case "${{matrix.mpi}}" in
+                MPICH) packages=libmpich-dev;;
+                OpenMPI) packages=libopenmpi-dev;;
+            esac
+            sudo apt-get install ${packages}
+            ;;
+        macOS)
+            # # The Homebrew MPICH doesn't have the `mpi-f08` Fortran
+            # # module, but cmake insists on it. We thus use MacPorts
+            # # instead.
+            # 
+            # # case "${{matrix.mpi}}" in
+            # #     MPICH) packages=mpich;;
+            # #     OpenMPI) packages=open-mpi;;
+            # # esac
+            # # brew install $packages
+            # 
+            # # Install MacPorts
+            # wget https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-11-BigSur.pkg
+            # sudo /usr/sbin/installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
+            # rm MacPorts-2.7.1-11-BigSur.pkg
+            # echo /opt/local/bin >> $GITHUB_PATH
+            # echo /opt/local/sbin >> $GITHUB_PATH
+            # export "PATH=/opt/local/bin:/opt/local/sbin:$PATH"
+            # sudo port sync
+            # 
+            # case "${{matrix.mpi}}" in
+            #     MPICH) packages='mpich-gcc10 +fortran';;
+            #     OpenMPI) packages='openmpi-gcc11 +fortran';;
+            # esac
+            # sudo port install $packages
+            ;;
+        esac
+
+    - name: Cache MPI
+      id: cache-mpi
+      uses: actions/cache@v2
+      with:
+        path: ${{github.workspace}}/mpi
+        key: ${{runner.os}}-${{matrix.mpi}}
+
+    - name: Install ${{matrix.mpi}}
+      if: steps.cache-mpi.outputs.cache-hit != 'true'
+      run: |
+        case $RUNNER_OS in
+        Linux)
+            ;;
+        macOS)
+            case ${{matrix.mpi}} in
+            MPICH)
+                wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
+                tar xzf mpich*.tar.gz
+                cd mpich*
+                export CC=gcc-11
+                export CXX=g++-11
+                export FC=gfortran-11
+                export FFLAGS=-fallow-argument-mismatch
+                export FCFLAGS=-fallow-argument-mismatch
+                ./configure \
+                    --disable-opencl \
+                    --enable-threads=multiple \
+                    --enable-two-level-namespace \
+                    --prefix=${{github.workspace}}/mpi
+                # # Remove empty `-l` flags from libtool
+                # # (Why are they there? They should not be.)
+                # # Run the command several times to handle multiple (overlapping) occurrences.
+                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
+                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
+                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
+                make -j2
+                make -j2 install
+                ;;
+            OpenMPI)
+                wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
+                tar xzf openmpi*.tar.gz
+                cd openmpi*
+                export CC=gcc-11
+                export CXX=g++-11
+                export FC=gfortran-11
+                export FFLAGS=-fallow-argument-mismatch
+                export FCFLAGS=-fallow-argument-mismatch
+                ./configure \
+                    --enable-mpi-fortran=usempif08 \
+                    --prefix=${{github.workspace}}/mpi
+                make -j2
+                make -j2 install
+                ;;
+            esac
+            ;;
+        esac
+
     - name: Install MPItrampoline
       run: |
         git clone https://github.com/eschnett/MPItrampoline
@@ -51,7 +146,7 @@ jobs:
         cmake --build build
         cmake --install build
 
-    - name: Configure
+    - name: Configure Tests
       run: |
         case $RUNNER_OS in
         Linux)
@@ -93,7 +188,7 @@ jobs:
             ;;
         esac
 
-    - name: Build
+    - name: Build tests
       run: |
         case $RUNNER_OS in
         Linux)
@@ -108,87 +203,8 @@ jobs:
         esac
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
-
-    - name: Install
+    - name: Install tests
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Install ${{matrix.mpi}}
-      run: |
-        case $RUNNER_OS in
-        Linux)
-            case "${{matrix.mpi}}" in
-                MPICH) packages=libmpich-dev;;
-                OpenMPI) packages=libopenmpi-dev;;
-            esac
-            sudo apt-get install ${packages}
-            ;;
-        macOS)
-            # # The Homebrew MPICH doesn't have the `mpi-f08` Fortran
-            # # module, but cmake insists on it. We thus use MacPorts
-            # # instead.
-            # 
-            # # case "${{matrix.mpi}}" in
-            # #     MPICH) packages=mpich;;
-            # #     OpenMPI) packages=open-mpi;;
-            # # esac
-            # # brew install $packages
-            # 
-            # # Install MacPorts
-            # wget https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-11-BigSur.pkg
-            # sudo /usr/sbin/installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
-            # rm MacPorts-2.7.1-11-BigSur.pkg
-            # echo /opt/local/bin >> $GITHUB_PATH
-            # echo /opt/local/sbin >> $GITHUB_PATH
-            # export "PATH=/opt/local/bin:/opt/local/sbin:$PATH"
-            # sudo port sync
-            # 
-            # case "${{matrix.mpi}}" in
-            #     MPICH) packages='mpich-gcc10 +fortran';;
-            #     OpenMPI) packages='openmpi-gcc11 +fortran';;
-            # esac
-            # sudo port install $packages
-            case ${{matrix.mpi}} in
-            MPICH)
-                wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
-                tar xzf mpich*.tar.gz
-                cd mpich*
-                export CC=gcc-11
-                export CXX=g++-11
-                export FC=gfortran-11
-                export FFLAGS=-fallow-argument-mismatch
-                export FCFLAGS=-fallow-argument-mismatch
-                ./configure \
-                    --disable-opencl \
-                    --enable-threads=multiple \
-                    --enable-two-level-namespace
-                # # Remove empty `-l` flags from libtool
-                # # (Why are they there? They should not be.)
-                # # Run the command several times to handle multiple (overlapping) occurrences.
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
-                make -j2
-                make -j2 install
-                ;;
-            OpenMPI)
-                wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
-                tar xzf openmpi*.tar.gz
-                cd openmpi*
-                export CC=gcc-11
-                export CXX=g++-11
-                export FC=gfortran-11
-                export FFLAGS=-fallow-argument-mismatch
-                export FCFLAGS=-fallow-argument-mismatch
-                ./configure --enable-mpi-fortran=usempif08
-                make -j2
-                make -j2 install
-                ;;
-            esac
-            ;;
-        esac
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
@@ -199,7 +215,9 @@ jobs:
         # case $RUNNER_OS in
         # Linux)
             cmake -S . -B build \
+                -DCMAKE_C_COMPILER=mpicc \
                 -DCMAKE_CXX_COMPILER=mpicxx \
+                -DCMAKE_Fortran_COMPILER=mpifc \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
         #     ;;
