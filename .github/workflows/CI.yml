@@ -18,8 +18,7 @@ jobs:
         # TODO: Test on Windows
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
-        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        findmpi: [MPIEXEC_EXECUTABLE]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
         mpitrampoline: [cd0c6dd21aee14f349f363242854dccbbd6aaf8a]
         mpiwrapper: [a52afb9c6900d8bfd5dd71fcc27519af4a4ebdb2]
@@ -43,30 +42,6 @@ jobs:
             sudo apt-get install ${packages}
             ;;
         macOS)
-            # # The Homebrew MPICH doesn't have the `mpi-f08` Fortran
-            # # module, but cmake insists on it. We thus use MacPorts
-            # # instead.
-            # 
-            # # case "${{matrix.mpi}}" in
-            # #     MPICH) packages=mpich;;
-            # #     OpenMPI) packages=open-mpi;;
-            # # esac
-            # # brew install $packages
-            # 
-            # # Install MacPorts
-            # wget https://github.com/macports/macports-base/releases/download/v2.7.1/MacPorts-2.7.1-11-BigSur.pkg
-            # sudo /usr/sbin/installer -pkg MacPorts-2.7.1-11-BigSur.pkg -target /
-            # rm MacPorts-2.7.1-11-BigSur.pkg
-            # echo /opt/local/bin >> $GITHUB_PATH
-            # echo /opt/local/sbin >> $GITHUB_PATH
-            # export "PATH=/opt/local/bin:/opt/local/sbin:$PATH"
-            # sudo port sync
-            # 
-            # case "${{matrix.mpi}}" in
-            #     MPICH) packages='mpich-gcc10 +fortran';;
-            #     OpenMPI) packages='openmpi-gcc11 +fortran';;
-            # esac
-            # sudo port install $packages
             ;;
         esac
 
@@ -117,12 +92,6 @@ jobs:
                         --enable-two-level-namespace \
                         --prefix=${{github.workspace}}/mpi
                 fi
-                # # Remove empty `-l` flags from libtool
-                # # (Why are they there? They should not be.)
-                # # Run the command several times to handle multiple (overlapping) occurrences.
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
-                # sed -i 's/"-l /"/g;s/ -l / /g;s/-l"/"/g' libtool
                 make -j2
                 make -j2 install
                 ;;
@@ -170,53 +139,13 @@ jobs:
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
         git checkout ${{matrix.mpiwrapper}}
-        # case $RUNNER_OS in
-        # Linux)
-            cmake -S . -B build \
-                -DCMAKE_VERBOSE_MAKEFILE=ON \
-                -DCMAKE_C_COMPILER=mpicc \
-                -DCMAKE_CXX_COMPILER=mpicxx \
-                -DCMAKE_Fortran_COMPILER=mpifort \
-                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #     ;;
-        # macOS)
-        #     case ${{matrix.mpi}} in
-        #     MPICH)
-        #         # We cannot use the compiler wrappers. These inject
-        #         # `-flat_namespace` into the link flags. We cannot
-        #         # have this; a plugin such as `libmpiwrapper.so` must
-        #         # use `-twolevel_namespace`. Otherwise, the MPI calls
-        #         # in `libmpiwrapper.so` would at run-time be resolved
-        #         # to MPItrampoline instead of MPICH, leading to an
-        #         # infinite recursion, stack overflow, and segfault.
-        #         cmake -S . -B build \
-        #             -DCMAKE_CXX_COMPILER=g++-mp-10 \
-        #             -DCMAKE_Fortran_COMPILER=gfortran-mp-10 \
-        #             -DMPI_CXX_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
-        #             -DMPI_CXX_LIB_NAMES='mpicxx;mpi;pmpi' \
-        #             -DMPI_Fortran_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
-        #             -DMPI_Fortran_LIB_NAMES='mpifort;mpi;pmpi' \
-        #             -DMPI_mpi_LIBRARY=/opt/local/lib/mpich-gcc10/libmpi.dylib \
-        #             -DMPI_mpicxx_LIBRARY=/opt/local/lib/mpich-gcc10/libmpicxx.dylib \
-        #             -DMPI_mpifort_LIBRARY=/opt/local/lib/mpich-gcc10/libmpifort.dylib \
-        #             -DMPI_pmpi_LIBRARY=/opt/local/lib/mpich-gcc10/libpmpi.dylib \
-        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-mpich-gcc10 \
-        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #         ;;
-        #     OpenMPI)
-        #         # The compiler wrappers have non-standard names
-        #         cmake -S . -B build \
-        #             -DCMAKE_CXX_COMPILER=mpicxx-openmpi-gcc11 \
-        #             -DCMAKE_Fortran_COMPILER=mpifort-openmpi-gcc11 \
-        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-openmpi-gcc11 \
-        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #         ;;
-        #     esac
-        #     ;;
-        # esac
+        cmake -S . -B build \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_C_COMPILER=mpicc \
+            -DCMAKE_CXX_COMPILER=mpicxx \
+            -DCMAKE_Fortran_COMPILER=mpifort \
+            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
         cmake --build build --config ${{env.BUILD_TYPE}}
         cmake --install build --config ${{env.BUILD_TYPE}}
 
@@ -309,11 +238,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
-        # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-        #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-        # fi
         export MPITRAMPOLINE_VERBOSE=1
-        # export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
@@ -324,89 +249,51 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
-        # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-        #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-        # fi
         export MPITRAMPOLINE_VERBOSE=1
-        # export MPITRAMPOLINE_DLOPEN_BINDING=now
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
 
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
       run: |
-        ##TODO
-        #if [ $RUNNER_OS = macOS -a \( ${{matrix.mpi}} = MPICH -o ${{matrix.findmpi}} = CMAKE_C_COMPILER -o ${{matrix.findmpi}} = MPI_HOME \) ]; then
-        #    : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
-        #else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-            #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            # fi
-            export MPITRAMPOLINE_VERBOSE=1
-            # export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
-        # fi
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
 
     - name: Test Fortran 90 mpif ${{matrix.mpi}}
       run: |
-        # #TODO
-        # if [ $RUNNER_OS = macOS -a \( ${{matrix.mpi}} = MPICH -o ${{matrix.findmpi}} = CMAKE_C_COMPILER \) ]; then
-        #     : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
-        # else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-            #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            # fi
-            export MPITRAMPOLINE_VERBOSE=1
-            # export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
-        # fi
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
 
     - name: Test Fortran 90 mpi ${{matrix.mpi}}
       run: |
-        # if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-        #     : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
-        # else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-            #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            # fi
-            export MPITRAMPOLINE_VERBOSE=1
-            # export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
-        # fi
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
 
     - name: Test Fortran 90 mpi_f08 ${{matrix.mpi}}
       run: |
-        # if [ $RUNNER_OS = macOS -a ${{matrix.mpi}} = MPICH ]; then
-        #     : # skip MPICH on macOS; it's broken for us because it's installed without two-level namespace
-        # else
-            case "${{matrix.mpi}}" in
-                MPICH) mpiexec_options='';;
-                OpenMPI) mpiexec_options='--oversubscribe';;
-            esac
-            # if [ $RUNNER_OS = Linux -a ${{matrix.mpi}} = OpenMPI ]; then
-            #     export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-            # fi
-            export MPITRAMPOLINE_VERBOSE=1
-            # export MPITRAMPOLINE_DLOPEN_BINDING=now
-            export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-            export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
-            $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
-        # fi
+        case "${{matrix.mpi}}" in
+            MPICH) mpiexec_options='';;
+            OpenMPI) mpiexec_options='--oversubscribe';;
+        esac
+        export MPITRAMPOLINE_VERBOSE=1
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
