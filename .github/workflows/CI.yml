@@ -163,12 +163,12 @@ jobs:
             export PATH="/usr/local/bin:$PATH"
             echo 'echo $PATH'
             echo $PATH
-            echo which gcc
-            which gcc
-            echo which g++
-            which g++
-            echo which gfortran
-            which gfortran
+            echo which gcc-11
+            which gcc-11
+            echo which g++-11
+            which g++-11
+            echo which gfortran-11
+            which gfortran-11
             echo 'echo $PATH'
             echo $PATH
 
@@ -177,9 +177,9 @@ jobs:
                 wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
-                export CC=gcc
-                export CXX=g++
-                export FC=gfortran
+                export CC=gcc-11
+                export CXX=g++-11
+                export FC=gfortran-11
                 ./configure \
                     --disable-opencl \
                     --enable-threads=multiple \
@@ -197,9 +197,9 @@ jobs:
                 wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
-                export CC=gcc
-                export CXX=g++
-                export FC=gfortran
+                export CC=gcc-11
+                export CXX=g++-11
+                export FC=gfortran-11
                 ./configure --enable-mpi-fortran=usempif08
                 make -j2
                 make -j2 install
