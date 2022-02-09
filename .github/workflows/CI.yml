@@ -151,14 +151,12 @@ jobs:
             # esac
             # sudo port install $packages
 
-            brew install gcc
-
             echo 'echo $PATH'
             echo $PATH
             echo /usr/local/bin >> $GITHUB_PATH
             echo 'echo $PATH'
             echo $PATH
-            export PATH="$PATH:/usr/local/bin"
+            export PATH="/usr/local/bin:$PATH"
             echo 'echo $PATH'
             echo $PATH
             echo which gcc
