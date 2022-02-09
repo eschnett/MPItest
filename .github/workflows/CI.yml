@@ -127,6 +127,62 @@ jobs:
             ;;
         esac
 
+    - name: Install mpiwrapper/${{matrix.mpi}}
+      run: |
+        # See MPIwrapper
+        export PATH="${{github.workspace}}/mpi/bin:$PATH"
+        git clone https://github.com/eschnett/MPIwrapper
+        cd MPIwrapper
+        git checkout ${{matrix.mpiwrapper}}
+        # case $RUNNER_OS in
+        # Linux)
+            cmake -S . -B build \
+                -DCMAKE_C_COMPILER=mpicc \
+                -DCMAKE_CXX_COMPILER=mpicxx \
+                -DCMAKE_Fortran_COMPILER=mpifort \
+                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
+        #     ;;
+        # macOS)
+        #     case ${{matrix.mpi}} in
+        #     MPICH)
+        #         # We cannot use the compiler wrappers. These inject
+        #         # `-flat_namespace` into the link flags. We cannot
+        #         # have this; a plugin such as `libmpiwrapper.so` must
+        #         # use `-twolevel_namespace`. Otherwise, the MPI calls
+        #         # in `libmpiwrapper.so` would at run-time be resolved
+        #         # to MPItrampoline instead of MPICH, leading to an
+        #         # infinite recursion, stack overflow, and segfault.
+        #         cmake -S . -B build \
+        #             -DCMAKE_CXX_COMPILER=g++-mp-10 \
+        #             -DCMAKE_Fortran_COMPILER=gfortran-mp-10 \
+        #             -DMPI_CXX_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
+        #             -DMPI_CXX_LIB_NAMES='mpicxx;mpi;pmpi' \
+        #             -DMPI_Fortran_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
+        #             -DMPI_Fortran_LIB_NAMES='mpifort;mpi;pmpi' \
+        #             -DMPI_mpi_LIBRARY=/opt/local/lib/mpich-gcc10/libmpi.dylib \
+        #             -DMPI_mpicxx_LIBRARY=/opt/local/lib/mpich-gcc10/libmpicxx.dylib \
+        #             -DMPI_mpifort_LIBRARY=/opt/local/lib/mpich-gcc10/libmpifort.dylib \
+        #             -DMPI_pmpi_LIBRARY=/opt/local/lib/mpich-gcc10/libpmpi.dylib \
+        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-mpich-gcc10 \
+        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
+        #         ;;
+        #     OpenMPI)
+        #         # The compiler wrappers have non-standard names
+        #         cmake -S . -B build \
+        #             -DCMAKE_CXX_COMPILER=mpicxx-openmpi-gcc11 \
+        #             -DCMAKE_Fortran_COMPILER=mpifort-openmpi-gcc11 \
+        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-openmpi-gcc11 \
+        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
+        #         ;;
+        #     esac
+        #     ;;
+        # esac
+        cmake --build build --config ${{env.BUILD_TYPE}}
+        cmake --install build --config ${{env.BUILD_TYPE}}
+
     - name: Install MPItrampoline
       run: |
         git clone https://github.com/eschnett/MPItrampoline
@@ -194,79 +250,21 @@ jobs:
 
     - name: Build tests
       run: |
-        case $RUNNER_OS in
-        Linux)
-            # do nothing
-            ;;
-        macOS)
-            # Use GCC-11 from Homebrew
-            export MPITRAMPOLINE_CC=gcc-11
-            export MPITRAMPOLINE_CXX=g++-11
-            export MPITRAMPOLINE_FC=gfortran-11
-            ;;
-        esac
+        #TODO case $RUNNER_OS in
+        #TODO Linux)
+        #TODO     # do nothing
+        #TODO     ;;
+        #TODO macOS)
+        #TODO     # Use GCC-11 from Homebrew
+        #TODO     export MPITRAMPOLINE_CC=gcc-11
+        #TODO     export MPITRAMPOLINE_CXX=g++-11
+        #TODO     export MPITRAMPOLINE_FC=gfortran-11
+        #TODO     ;;
+        #TODO esac
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install tests
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Install mpiwrapper/${{matrix.mpi}}
-      run: |
-        echo ${{github.workspace}}/mpi >>${GITHUB_PATH}
-        export PATH="${{github.workspace}}/mpi:$PATH"
-
-        # See MPIwrapper
-        git clone https://github.com/eschnett/MPIwrapper
-        cd MPIwrapper
-        git checkout ${{matrix.mpiwrapper}}
-        # case $RUNNER_OS in
-        # Linux)
-            cmake -S . -B build \
-                -DCMAKE_C_COMPILER=mpicc \
-                -DCMAKE_CXX_COMPILER=mpicxx \
-                -DCMAKE_Fortran_COMPILER=mpifort \
-                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #     ;;
-        # macOS)
-        #     case ${{matrix.mpi}} in
-        #     MPICH)
-        #         # We cannot use the compiler wrappers. These inject
-        #         # `-flat_namespace` into the link flags. We cannot
-        #         # have this; a plugin such as `libmpiwrapper.so` must
-        #         # use `-twolevel_namespace`. Otherwise, the MPI calls
-        #         # in `libmpiwrapper.so` would at run-time be resolved
-        #         # to MPItrampoline instead of MPICH, leading to an
-        #         # infinite recursion, stack overflow, and segfault.
-        #         cmake -S . -B build \
-        #             -DCMAKE_CXX_COMPILER=g++-mp-10 \
-        #             -DCMAKE_Fortran_COMPILER=gfortran-mp-10 \
-        #             -DMPI_CXX_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
-        #             -DMPI_CXX_LIB_NAMES='mpicxx;mpi;pmpi' \
-        #             -DMPI_Fortran_ADDITIONAL_INCLUDE_DIRS=/opt/local/include/mpich-gcc10 \
-        #             -DMPI_Fortran_LIB_NAMES='mpifort;mpi;pmpi' \
-        #             -DMPI_mpi_LIBRARY=/opt/local/lib/mpich-gcc10/libmpi.dylib \
-        #             -DMPI_mpicxx_LIBRARY=/opt/local/lib/mpich-gcc10/libmpicxx.dylib \
-        #             -DMPI_mpifort_LIBRARY=/opt/local/lib/mpich-gcc10/libmpifort.dylib \
-        #             -DMPI_pmpi_LIBRARY=/opt/local/lib/mpich-gcc10/libpmpi.dylib \
-        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-mpich-gcc10 \
-        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #         ;;
-        #     OpenMPI)
-        #         # The compiler wrappers have non-standard names
-        #         cmake -S . -B build \
-        #             -DCMAKE_CXX_COMPILER=mpicxx-openmpi-gcc11 \
-        #             -DCMAKE_Fortran_COMPILER=mpifort-openmpi-gcc11 \
-        #             -DMPIEXEC_EXECUTABLE=/opt/local/bin/mpiexec-openmpi-gcc11 \
-        #             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        #             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        #         ;;
-        #     esac
-        #     ;;
-        # esac
-        cmake --build build --config ${{env.BUILD_TYPE}}
-        cmake --install build --config ${{env.BUILD_TYPE}}
 
     - name: Test C ${{matrix.mpi}}
       run: |
