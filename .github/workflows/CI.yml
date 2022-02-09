@@ -210,6 +210,9 @@ jobs:
 
     - name: Install mpiwrapper/${{matrix.mpi}}
       run: |
+        echo ${{github.workspace}}/mpi >>${GITHUB_PATH}
+        export PATH="${{github.workspace}}/mpi:$PATH"
+
         # See MPIwrapper
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
