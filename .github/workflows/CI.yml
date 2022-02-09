@@ -155,6 +155,9 @@ jobs:
                 wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
+                export CC=gcc-mp-10 
+                export CXX=g++-mp-10 
+                export FC=gfortran-mp-10 
                 ./configure \
                     --disable-opencl \
                     --enable-threads=multiple \
@@ -172,6 +175,9 @@ jobs:
                 wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
+                export CC=gcc-mp-10 
+                export CXX=g++-mp-10 
+                export FC=gfortran-mp-10 
                 ./configure --enable-mpi-fortran=usempif08
                 make -j2
                 make -j2 install
