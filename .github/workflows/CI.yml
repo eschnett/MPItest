@@ -151,6 +151,15 @@ jobs:
             # esac
             # sudo port install $packages
 
+            echo which gcc
+            which gcc
+            echo which g++
+            which g++
+            echo which gfortran
+            which gfortran
+            echo 'echo $PATH'
+            echo $PATH
+
             case ${{matrix.mpi}} in
             MPICH)
                 wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
