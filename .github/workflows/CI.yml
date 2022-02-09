@@ -18,8 +18,8 @@ jobs:
         # TODO: Test on Windows
         os: [ubuntu-20.04, macos-11]
         mpi: [MPICH, OpenMPI]
-        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        #TODO shared: [OFF, ON]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        shared: [OFF, ON]
         findmpi: [MPIEXEC_EXECUTABLE]
         shared: [OFF]
         mpitrampoline: [cd0c6dd21aee14f349f363242854dccbbd6aaf8a]
@@ -250,17 +250,6 @@ jobs:
 
     - name: Build tests
       run: |
-        #TODO case $RUNNER_OS in
-        #TODO Linux)
-        #TODO     # do nothing
-        #TODO     ;;
-        #TODO macOS)
-        #TODO     # Use GCC-11 from Homebrew
-        #TODO     export MPITRAMPOLINE_CC=gcc-11
-        #TODO     export MPITRAMPOLINE_CXX=g++-11
-        #TODO     export MPITRAMPOLINE_FC=gfortran-11
-        #TODO     ;;
-        #TODO esac
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install tests
