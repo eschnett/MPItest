@@ -20,8 +20,8 @@ jobs:
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
-        mpitrampoline: [e43c8fcb30008bf5dcbc000b16e060a6f30680ec]
-        mpiwrapper: [8383ca583cc46c25e48084c09001abfc326f05ce]
+        mpitrampoline: [33cae4a6fb78605751f318dfbbf37c4250312ddf]
+        mpiwrapper: [40b72892441cd61f85945603faece67c7fc5baae]
         exclude:
           - os: macos-11
             shared: ON
