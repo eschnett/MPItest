@@ -16,7 +16,7 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-latest, macos-latest]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
@@ -39,6 +39,7 @@ jobs:
                 MPICH) packages=libmpich-dev;;
                 OpenMPI) packages=libopenmpi-dev;;
             esac
+            sudo apt-get update
             sudo apt-get install ${packages}
             ;;
         macOS)
