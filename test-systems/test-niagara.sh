@@ -91,7 +91,7 @@ $MPITEST_SET_ENVVARS
 
 export MPITRAMPOLINE_VERBOSE=1
 export MPITRAMPOLINE_MPIEXEC="$path/local/mpiwrapper/bin/mpiwrapperexec"
-export MPITRAMPOLINE_LIB="$path/local/mpiwrapper/lib/libmpiwrapper.so"
+export MPITRAMPOLINE_LIB="$path/local/mpiwrapper/lib64/libmpiwrapper.so"
 # export MPITRAMPOLINE_DLOPEN_MODE=dlopen
 # export MPITRAMPOLINE_DLOPEN_BINDING=now
 
