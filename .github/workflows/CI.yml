@@ -22,9 +22,9 @@ jobs:
         shared: [OFF, ON]
         mpitrampoline: [c9b3d2bfd4658d9d6c6984582e5eca844ece564c]
         mpiwrapper: [9492ca98f5a24e7183142712ed35fff1ca0d7719]
-        exclude:
-          - os: macos-11
-            shared: ON
+        # exclude:
+        #   - os: macos-11
+        #     shared: ON
 
     runs-on: ${{matrix.os}}
 
@@ -106,10 +106,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export CFLAGS='-fPIC -DPIC'
-                    export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FFLAGS=-fallow-argument-mismatch
+                    export FCFLAGS=-fallow-argument-mismatch
                     ./configure \
                         --disable-man-pages \
                         --enable-mpi-fortran=usempif08 \
@@ -117,8 +115,10 @@ jobs:
                 else
                     # On macOS, MPItrampoline shared libraries work
                     # only for statically linked MPI libraries.
-                    export FFLAGS=-fallow-argument-mismatch
-                    export FCFLAGS=-fallow-argument-mismatch
+                    export CFLAGS='-fPIC -DPIC'
+                    export CXXLAGS='-fPIC -DPIC'
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                     ./configure \
                         --disable-man-pages \
                         --disable-shared \
