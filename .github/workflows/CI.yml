@@ -106,24 +106,24 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    # On macOS, MPItrampoline shared libraries work
-                    # only for statically linked MPI libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
                     export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                     export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                     ./configure \
                         --disable-man-pages \
-                        --disable-shared \
                         --enable-mpi-fortran=usempif08 \
-                        --enable-static \
                         --prefix=${{github.workspace}}/mpi
                 else
+                    # On macOS, MPItrampoline shared libraries work
+                    # only for statically linked MPI libraries.
                     export FFLAGS=-fallow-argument-mismatch
                     export FCFLAGS=-fallow-argument-mismatch
                     ./configure \
                         --disable-man-pages \
+                        --disable-shared \
                         --enable-mpi-fortran=usempif08 \
+                        --enable-static \
                         --prefix=${{github.workspace}}/mpi
                 fi
                 make -j2
