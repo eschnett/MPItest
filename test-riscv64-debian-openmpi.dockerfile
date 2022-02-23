@@ -1,7 +1,7 @@
 # Test MPItrampoline on various CPU architectures
 # Run `docker build --file test-riscv64-debian-openmpi.dockerfile .`
 
-# FROM riscv64/debian:11.1
+# FROM riscv64/debian:11.2
 FROM riscv64/debian:sid-20210902-slim
 
 RUN mkdir /cactus

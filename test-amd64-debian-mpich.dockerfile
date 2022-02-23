@@ -1,7 +1,7 @@
 # This Dockerfile is for debugging the CI setup
 # Run `docker build --file test-amd64-debian-mpich.dockerfile .`
 
-FROM amd64/debian:11.1
+FROM amd64/debian:11.2
 
 RUN mkdir /cactus
 WORKDIR /cactus

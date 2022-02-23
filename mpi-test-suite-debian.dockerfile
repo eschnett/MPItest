@@ -3,7 +3,7 @@
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
-FROM ${cpuarch}/debian:11.1
+FROM ${cpuarch}/debian:11.2
 
 ARG mpivendor=MPICH             # MPICH, OpenMPI
 

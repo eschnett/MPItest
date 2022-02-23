@@ -1,7 +1,7 @@
 # Test MPItrampoline on various CPU architectures
 # Run `docker build --file test-ppc64le-debian-openmpi.dockerfile .`
 
-FROM ppc64le/debian:11.1
+FROM ppc64le/debian:11.2
 
 RUN mkdir /cactus
 WORKDIR /cactus

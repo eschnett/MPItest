@@ -1,7 +1,7 @@
 # Test MPItrampoline on various CPU architectures
 # Run `docker build --file test-i386-debian-mpich.dockerfile .`
 
-FROM i386/debian:11.1
+FROM i386/debian:11.2
 
 RUN mkdir /cactus
 WORKDIR /cactus

@@ -1,7 +1,7 @@
 # Test MPItrampoline on various CPU architectures
 # Run `docker build --file test-arm64v8-debian-mpich.dockerfile .`
 
-FROM arm64v8/debian:11.1
+FROM arm64v8/debian:11.2
 
 RUN mkdir /cactus
 WORKDIR /cactus
