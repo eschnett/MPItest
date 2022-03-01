@@ -28,13 +28,13 @@ program mpi_test_mpi_f08_f90
      call MPI_Abort(MPI_COMM_WORLD, 3)
   end if
   if (status%MPI_TAG /= 0) call MPI_Abort(MPI_COMM_WORLD, 4)
-  ! call MPI_Get_count(status, MPI_INTEGER, count)
-  ! if (count /= 1) call MPI_Abort(MPI_COMM_WORLD, 5)
-  ! if (rank == 0) then
-  !    print '("sent: ",i0,", received: ",i0)', isend, irecv
-  !    print '("source: ",i0,", tag: ",i0,", error: ",i0,", count: ",i0)', &
-  !         status%MPI_SOURCE, status%MPI_TAG, status%MPI_ERROR, count
-  ! end if
+  call MPI_Get_count(status, MPI_INTEGER, count)
+  if (count /= 1) call MPI_Abort(MPI_COMM_WORLD, 5)
+  if (rank == 0) then
+     print '("sent: ",i0,", received: ",i0)', isend, irecv
+     print '("source: ",i0,", tag: ",i0,", error: ",i0,", count: ",i0)', &
+          status%MPI_SOURCE, status%MPI_TAG, status%MPI_ERROR, count
+  end if
 
   call MPI_Finalize()
 
