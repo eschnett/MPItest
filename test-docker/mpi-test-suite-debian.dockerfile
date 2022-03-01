@@ -1,5 +1,5 @@
 # This Dockerfile is for debugging the CI setup
-# Run `docker build --file mpi-test-suite-debian.dockerfile --build-arg cpuarch=amd64 --build-arg mpivendor=MPICH --build-arg date="$(date)" --progress plain .`
+# Run `docker build --file mpi-test-suite-debian.dockerfile --build-arg cpuarch=amd64 --build-arg mpivendor=MPICH --progress plain .`
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
@@ -42,7 +42,7 @@ RUN : $date
 # Install MPIwrapper
 RUN git clone -n https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
-RUN git checkout 428a2d3726caef68aebe62a492066d1a9de6fa4a
+RUN git checkout 3432326dd15143ca97dd1aae2933512fa8ae636c
 RUN which mpirun
 RUN cmake -S . -B build \
         -DCMAKE_CXX_COMPILER=mpicxx \
@@ -55,7 +55,7 @@ WORKDIR /cactus
 # Install MPItrampoline
 RUN git clone -n https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
-RUN git checkout eee4ec583f6b0246f249d4684999f9f3de8b3c28
+RUN git checkout 64492c35db0d6fb3074488119e6428d2402c1025
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/root/mpitrampoline
