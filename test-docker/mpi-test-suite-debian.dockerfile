@@ -1,5 +1,5 @@
 # This Dockerfile is for debugging the CI setup
-# Run `docker build --file mpi-test-suite-debian.dockerfile --build-arg cpuarch=amd64 --build-arg mpivendor=MPICH --progress plain .`
+# Run `docker build --file mpi-test-suite-debian.dockerfile --build-arg cpuarch=amd64 --build-arg mpivendor=MPICH --build-arg date="$(date)" --progress plain .`
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
@@ -27,13 +27,19 @@ RUN apt-get update && \
         python3 \
         wget
 
-# Install MPIwrapper
+# Install system MPI
 RUN case $mpivendor in \
         MPICH) pkgs=libmpich-dev;; \
         OpenMPI) pkgs=libopenmpi-dev;; \
         *) exit 1;; \
     esac && \
     apt-get --yes --no-install-recommends install ${pkgs}
+
+# Add a dependency to force a rebuild
+ARG date=0
+RUN : $date
+
+# Install MPIwrapper
 RUN git clone -n https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
 RUN git checkout 428a2d3726caef68aebe62a492066d1a9de6fa4a

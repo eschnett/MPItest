@@ -1,5 +1,5 @@
 # This Dockerfile is for debugging the CI setup
-# Run `docker build --file test-ubuntu-20.04.dockerfile .`
+# Run `docker build --file test-ubuntu-20.04.dockerfile --build-arg date="$(date)" .`
 
 FROM ubuntu:20.04
 
@@ -19,6 +19,10 @@ RUN apt-get update && \
         git \
         python3 \
         wget
+
+# Add a dependency to force a rebuild
+ARG date=0
+RUN : $date
 
 # Install MPItrampoline
 RUN git clone https://github.com/eschnett/MPItrampoline
