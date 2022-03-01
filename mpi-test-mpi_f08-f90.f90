@@ -12,10 +12,10 @@ program mpi_test_mpi_f08_f90
 
   call MPI_Init()
 
-  ! call MPI_Comm_rank(MPI_COMM_WORLD, rank)
-  ! call MPI_Comm_size(MPI_COMM_WORLD, size)
-  ! print '("size: ",i0,", rank: ",i0)', size, rank
-  ! 
+  call MPI_Comm_rank(MPI_COMM_WORLD, rank)
+  call MPI_Comm_size(MPI_COMM_WORLD, size)
+  print '("size: ",i0,", rank: ",i0)', size, rank
+  
   ! isend = 42
   ! irecv = -1
   ! call MPI_Send(isend, 1, MPI_INTEGER, mod(rank + 1, size), 0, &
