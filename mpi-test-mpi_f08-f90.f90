@@ -8,6 +8,8 @@ program mpi_test_mpi_f08_f90
 
   type(MPI_Status) :: status
 
+  print '("mpi_test_mpi_f08_f90")'
+
   call MPI_Init()
 
   call MPI_Comm_rank(MPI_COMM_WORLD, rank)
@@ -35,5 +37,7 @@ program mpi_test_mpi_f08_f90
   end if
 
   call MPI_Finalize()
+
+  print '("Done.")'
 
 end program mpi_test_mpi_f08_f90

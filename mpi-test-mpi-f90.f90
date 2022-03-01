@@ -9,6 +9,8 @@ program mpi_test_mpi_f90
   integer status(MPI_STATUS_SIZE)
   integer ierror
 
+  print '("mpi_test_mpi_f90")'
+
   print '("MPI_Init")'
   call MPI_Init(ierror)
 
@@ -43,5 +45,7 @@ program mpi_test_mpi_f90
 
   print '("MPI_Finalize")'
   call MPI_Finalize(ierror)
+
+  print '("Done.")'
 
 end program mpi_test_mpi_f90

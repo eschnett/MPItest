@@ -9,6 +9,8 @@ program mpi_test_f90
   integer status(MPI_STATUS_SIZE)
   integer ierror
 
+  print '("mpi_test_f90")'
+
   call MPI_Init(ierror)
 
   call MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
@@ -34,5 +36,7 @@ program mpi_test_f90
   end if
 
   call MPI_Finalize(ierror)
+
+  print '("Done.")'
 
 end program mpi_test_f90
