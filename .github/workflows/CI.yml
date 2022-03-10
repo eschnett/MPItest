@@ -105,7 +105,8 @@ jobs:
                 export CXX=g++-11
                 export F77=gfortran-11
                 export FC=gfortran-11
-                if [ ${{matrix.shared}} = OFF ]; then
+                #TODO if [ ${{matrix.shared}} = OFF ]; then
+                if false; then
                     export FFLAGS='-fallow-argument-mismatch'
                     export FCFLAGS='-fallow-argument-mismatch'
                     ./configure \
