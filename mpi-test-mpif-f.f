@@ -21,14 +21,21 @@
 
       isend = 42
       irecv = -1
+      print '("[",i0,"] MPI_Send")', rank
       call MPI_Send(isend, 1, MPI_INTEGER, mod(rank + 1, size),
      $     0, MPI_COMM_WORLD, ierror)
+      print '("[",i0,"] MPI_Recv")', rank
       call MPI_Recv(irecv, 1, MPI_INTEGER, mod(rank + size - 1, size),
      $     0, MPI_COMM_WORLD, status, ierror)
+      print '("[",i0,"] if isend")', rank
       if (isend /= 42) stop
+      print '("[",i0,"] if irecv")', rank
       if (irecv /= 42) stop
+      print '("[",i0,"] if source")', rank
       if (status(MPI_SOURCE) /= mod(rank + size - 1, size)) stop
+      print '("[",i0,"] if tag")', rank
       if (status(MPI_TAG) /= 0) stop
+      print '("[",i0,"] MPI_Get_count")', rank
       call MPI_Get_count(status, MPI_INTEGER, count, ierror)
       if (count /= 1) stop
       if (rank == 0) then
