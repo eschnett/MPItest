@@ -185,6 +185,8 @@ jobs:
             export CC=gcc-11
             export CXX=g++-11
             export FC=gfortran-11
+            # Not needed for CMAKE_C_COMPILER
+            export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
             ;;
         esac
         case "${{matrix.findmpi}}" in
@@ -192,7 +194,6 @@ jobs:
             cmake -B ${{github.workspace}}/build \
                 -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DMPIEXEC_EXECUTABLE=$HOME/mpitrampoline/bin/mpiexec \
-                -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
             ;;
@@ -200,7 +201,6 @@ jobs:
             cmake -B ${{github.workspace}}/build \
                 -DCMAKE_VERBOSE_MAKEFILE=ON \
                 -DMPI_HOME=$HOME/mpitrampoline \
-                -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' \
                 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                 -DCMAKE_INSTALL_PREFIX=$HOME/mpitest
             ;;
