@@ -226,6 +226,7 @@ jobs:
             export CC=gcc-11
             export CXX=g++-11
             export FC=gfortran-11
+            export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
             export MPITRAMPOLINE_CC=gcc-11
             export MPITRAMPOLINE_CXX=g++-11
             export MPITRAMPOLINE_FC=gfortran-11
