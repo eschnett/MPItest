@@ -25,6 +25,8 @@ jobs:
         exclude:
           - os: macos-11
             shared: ON
+          - os: macos-11
+            mpi: OpenMPI        # temporarily
 
     runs-on: ${{matrix.os}}
 
