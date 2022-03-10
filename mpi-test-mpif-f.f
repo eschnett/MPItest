@@ -28,25 +28,36 @@
       call MPI_Recv(irecv, 1, MPI_INTEGER, mod(rank + size - 1, size),
      $     0, MPI_COMM_WORLD, status, ierror)
       print '("[",i0,"] if isend")', rank
+      call flush()
       if (isend /= 42) stop
       print '("[",i0,"] if irecv")', rank
+      call flush()
       if (irecv /= 42) stop
       print '("[",i0,"] if source")', rank
+      call flush()
+      print '("[",i0,"] if source SRC=", i0)', rank, MPI_SOURCE
+      call flush()
       print '("[",i0,"] if source mod=", i0)', rank,
      &     mod(rank + size - 1, size)
+      call flush()
       print '("[",i0,"] if source src=", i0)', rank, status(MPI_SOURCE)
+      call flush()
       if (status(MPI_SOURCE) /= mod(rank + size - 1, size)) stop
       print '("[",i0,"] if tag")', rank
+      call flush()
       if (status(MPI_TAG) /= 0) stop
       print '("[",i0,"] MPI_Get_count")', rank
+      call flush()
       call MPI_Get_count(status, MPI_INTEGER, count, ierror)
       if (count /= 1) stop
       if (rank == 0) then
          print '("sent: ",i0,", received: ",i0)', isend, irecv
+         call flush()
          print '("source: ",i0,", tag: ",i0,", error: ",i0,
      $", count: ",i0)',
      $        status(MPI_SOURCE), status(MPI_TAG), status(MPI_ERROR),
      $        count
+         call flush()
       end if
 
       ivalue = 1
