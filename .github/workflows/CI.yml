@@ -178,7 +178,8 @@ jobs:
       run: |
         case $RUNNER_OS in
         Linux)
-            # do nothing
+            # Not needed for CMAKE_C_COMPILER
+            export FFLAGS='-fcray-pointer'
             ;;
         macOS)
             # Use GCC-11 from Homebrew
@@ -219,7 +220,7 @@ jobs:
       run: |
         case $RUNNER_OS in
         Linux)
-            # do nothing
+            export FFLAGS='-fcray-pointer'
             ;;
         macOS)
             # Use GCC-11 from Homebrew
