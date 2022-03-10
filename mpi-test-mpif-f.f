@@ -8,8 +8,11 @@
 
       integer ivalue, isum
 
-      integer status(MPI_STATUS_SIZE)
+!     integer status(MPI_STATUS_SIZE)
+      integer status(100 * MPI_STATUS_SIZE)
       integer ierror
+
+      integer size1
 
       print '("mpi_test_f")'
 
@@ -18,6 +21,8 @@
       call MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
       call MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
       print '("size: ",i0,", rank: ",i0)', size, rank
+      size1 = size
+      print '("size1: ",i0,", rank: ",i0)', size1, rank
 
       isend = 42
       irecv = -1
@@ -27,6 +32,9 @@
       print '("[",i0,"] MPI_Recv")', rank
       call MPI_Recv(irecv, 1, MPI_INTEGER, mod(rank + size - 1, size),
      $     0, MPI_COMM_WORLD, status, ierror)
+      print '("[",i0,"] if size")', rank, size
+      print '("[",i0,"] if size1")', rank, size1
+      call flush()
       print '("[",i0,"] if isend")', rank
       call flush()
       if (isend /= 42) stop
@@ -41,6 +49,7 @@
      &     rank, rank + size - 1
       call flush()
       print '("[",i0,"] if source size=", i0)', rank, size
+      print '("[",i0,"] if source size1=", i0)', rank, size1
       call flush()
       print '("[",i0,"] if source mod=", i0)', rank,
      &     mod(rank + size - 1, size)
