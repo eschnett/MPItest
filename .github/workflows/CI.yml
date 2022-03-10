@@ -71,8 +71,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS='-fallow-argument-mismatch
-                    export FCFLAGS='-fallow-argument-mismatch
+                    export FFLAGS='-fallow-argument-mismatch'
+                    export FCFLAGS='-fallow-argument-mismatch'
                     ./configure \
                         --disable-opencl \
                         --enable-threads=multiple \
@@ -83,8 +83,8 @@ jobs:
                     # only for statically linked MPI libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
@@ -106,8 +106,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS='-fallow-argument-mismatch
-                    export FCFLAGS='-fallow-argument-mismatch
+                    export FFLAGS='-fallow-argument-mismatch'
+                    export FCFLAGS='-fallow-argument-mismatch'
                     ./configure \
                         --disable-man-pages \
                         --enable-mpi-fortran=usempif08 \
@@ -117,8 +117,8 @@ jobs:
                     # only for statically linked MPI libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                     ./configure \
                         --disable-man-pages \
                         --disable-shared \
