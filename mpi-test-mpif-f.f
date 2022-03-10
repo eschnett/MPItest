@@ -32,6 +32,9 @@
       print '("[",i0,"] if irecv")', rank
       if (irecv /= 42) stop
       print '("[",i0,"] if source")', rank
+      print '("[",i0,"] if source mod=", i0)', rank,
+     &     mod(rank + size - 1, size)
+      print '("[",i0,"] if source src=", i0)', rank, status(MPI_SOURCE)
       if (status(MPI_SOURCE) /= mod(rank + size - 1, size)) stop
       print '("[",i0,"] if tag")', rank
       if (status(MPI_TAG) /= 0) stop
