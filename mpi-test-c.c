@@ -163,6 +163,9 @@ int main(int argc, char **argv) {
     MPI_Allreduce(&ivalue, &isum, 1, MPI_INT, op_add, MPI_COMM_WORLD);
     assert(ivalue == 1);
     assert(isum == size);
+    fprintf(stderr, "MPI_Allreduce (in place)\n");
+    MPI_Allreduce(MPI_IN_PLACE, &ivalue, 1, MPI_INT, op_add, MPI_COMM_WORLD);
+    assert(ivalue == isum);
     fprintf(stderr, "MPI_Op_free\n");
     MPI_Op_free(&op_add);
   }

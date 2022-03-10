@@ -6,6 +6,8 @@
       integer isend, irecv
       integer count
 
+      integer ivalue, isum
+
       integer status(MPI_STATUS_SIZE)
       integer ierror
 
@@ -36,6 +38,16 @@
      $        status(MPI_SOURCE), status(MPI_TAG), status(MPI_ERROR),
      $        count
       end if
+
+      ivalue = 1
+      print '("MPI_Allreduce")'
+      call MPI_Allreduce(ivalue, isum, 1, MPI_INTEGER, MPI_SUM,
+     &     MPI_COMM_WORLD, ierror)
+      if (ivalue /= 1) call MPI_Abort(MPI_COMM_WORLD, 6, ierror)
+      if (isum /= size) call MPI_Abort(MPI_COMM_WORLD, 7, ierror)
+      call MPI_Allreduce(MPI_IN_PLACE, ivalue, 1, MPI_INTEGER, MPI_SUM,
+     &     MPI_COMM_WORLD, ierror)
+      if (ivalue /= isum) call MPI_Abort(MPI_COMM_WORLD, 8, ierror)
 
       call MPI_Finalize(ierror)
 
