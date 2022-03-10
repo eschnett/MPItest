@@ -37,6 +37,11 @@
       call flush()
       print '("[",i0,"] if source SRC=", i0)', rank, MPI_SOURCE
       call flush()
+      print '("[",i0,"] if source rank+size-1=", i0)',
+     &     rank, rank + size - 1
+      call flush()
+      print '("[",i0,"] if source size=", i0)', rank, size
+      call flush()
       print '("[",i0,"] if source mod=", i0)', rank,
      &     mod(rank + size - 1, size)
       call flush()
