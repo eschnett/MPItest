@@ -115,6 +115,8 @@ jobs:
                 else
                     # On macOS, MPItrampoline shared libraries work
                     # only for statically linked MPI libraries.
+                    find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g'
+                    ./autogen.pl --force
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
                     export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
