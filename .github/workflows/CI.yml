@@ -20,7 +20,7 @@ jobs:
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
-        mpitrampoline: [d88328c4065c96f44ab4377bd561299eb16f4294]
+        mpitrampoline: [f198c5ac576d1555156552dbf5743b1da4375887]
         mpiwrapper: [d014688bc4ad050e24239938aaaf83da07a96a1b]
         exclude:
           - os: macos-11
@@ -62,7 +62,7 @@ jobs:
         macOS)
             case ${{matrix.mpi}} in
             MPICH)
-                wget https://www.mpich.org/static/downloads/4.0/mpich-4.0.tar.gz
+                wget https://www.mpich.org/static/downloads/4.0.1/mpich-4.0.1.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
                 # Use GCC-11 from Homebrew
@@ -71,8 +71,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS=-fallow-argument-mismatch
-                    export FCFLAGS=-fallow-argument-mismatch
+                    export FFLAGS='-fallow-argument-mismatch -fcray_pointer'
+                    export FCFLAGS='-fallow-argument-mismatch -fcray_pointer'
                     ./configure \
                         --disable-opencl \
                         --enable-threads=multiple \
@@ -83,8 +83,8 @@ jobs:
                     # only for statically linked MPI libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch -fcray_pointer'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch -fcray_pointer'
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
@@ -106,8 +106,8 @@ jobs:
                 export F77=gfortran-11
                 export FC=gfortran-11
                 if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS=-fallow-argument-mismatch
-                    export FCFLAGS=-fallow-argument-mismatch
+                    export FFLAGS='-fallow-argument-mismatch -fcray_pointer'
+                    export FCFLAGS='-fallow-argument-mismatch -fcray_pointer'
                     ./configure \
                         --disable-man-pages \
                         --enable-mpi-fortran=usempif08 \
@@ -117,8 +117,8 @@ jobs:
                     # only for statically linked MPI libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch -fcray_pointer'
+                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch -fcray_pointer'
                     ./configure \
                         --disable-man-pages \
                         --disable-shared \
