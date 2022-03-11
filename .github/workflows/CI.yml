@@ -35,19 +35,17 @@ jobs:
       run: |
         case $RUNNER_OS in
         Linux)
-            case "${{matrix.mpi}}" in
-                MPICH) packages=libmpich-dev;;
-                OpenMPI) packages=libopenmpi-dev;;
-            esac
             sudo apt-get update
-            sudo apt-get install ${packages}
+            case "${{matrix.mpi}}" in
+                MPICH) sudo apt-get install libmpich-dev;;
+                OpenMPI) sudo apt-get install libopenmpi-dev;;
+            esac
             ;;
         macOS)
             case "${{matrix.mpi}}" in
-                MPICH) packages=;;
-                OpenMPI) packages=automake;;
+                MPICH) :;;
+                OpenMPI) brew install automake;;
             esac
-            brew install ${packages}
             ;;
         esac
 
