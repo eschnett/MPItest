@@ -83,7 +83,7 @@ jobs:
                         --prefix=${{github.workspace}}/mpi
                 else
                     # On macOS, MPItrampoline shared libraries work
-                    # only for statically linked MPI libraries.
+                    # only for statically linked MPICH libraries.
                     export CFLAGS='-fPIC -DPIC'
                     export CXXLAGS='-fPIC -DPIC'
                     export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
@@ -108,30 +108,20 @@ jobs:
                 export CXX=g++-11
                 export F77=gfortran-11
                 export FC=gfortran-11
-                #TODO if [ ${{matrix.shared}} = OFF ]; then
-                if false; then
-                    export FFLAGS='-fallow-argument-mismatch'
-                    export FCFLAGS='-fallow-argument-mismatch'
-                    ./configure \
-                        --disable-man-pages \
-                        --enable-mpi-fortran=usempif08 \
-                        --prefix=${{github.workspace}}/mpi
-                else
-                    # On macOS, MPItrampoline shared libraries work
-                    # only for statically linked MPI libraries.
-                    find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g'
-                    ./autogen.pl --force
-                    export CFLAGS='-fPIC -DPIC'
-                    export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    ./configure \
-                        --disable-man-pages \
-                        --disable-shared \
-                        --enable-mpi-fortran=usempif08 \
-                        --enable-static \
-                        --prefix=${{github.workspace}}/mpi
-                fi
+                # On macOS, MPItrampoline works only for statically
+                # linked OpenMPI libraries.
+                find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g'
+                ./autogen.pl --force
+                export CFLAGS='-fPIC -DPIC'
+                export CXXLAGS='-fPIC -DPIC'
+                export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                ./configure \
+                    --disable-man-pages \
+                    --disable-shared \
+                    --enable-mpi-fortran=usempif08 \
+                    --enable-static \
+                    --prefix=${{github.workspace}}/mpi
                 make -j2
                 make -j2 install
                 ;;
