@@ -1,1 +1,4 @@
 build
+test-docker/*.failed
+test-docker/*.log
+test-docker/*.succeeded

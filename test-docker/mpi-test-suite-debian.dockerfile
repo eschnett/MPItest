@@ -3,7 +3,7 @@
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
-FROM ${cpuarch}/debian:11.2
+FROM ${cpuarch}/debian:11.3
 
 ARG mpivendor=MPICH             # MPICH, OpenMPI
 
@@ -42,7 +42,7 @@ RUN : $date
 # Install MPIwrapper
 RUN git clone -n https://github.com/eschnett/MPIwrapper
 WORKDIR /cactus/MPIwrapper
-RUN git checkout 3432326dd15143ca97dd1aae2933512fa8ae636c
+RUN git checkout f2a5e2098ae0eee4bebd18c4ad19f41ce6ac9064
 RUN which mpirun
 RUN cmake -S . -B build \
         -DCMAKE_CXX_COMPILER=mpicxx \
@@ -55,7 +55,7 @@ WORKDIR /cactus
 # Install MPItrampoline
 RUN git clone -n https://github.com/eschnett/MPItrampoline
 WORKDIR /cactus/MPItrampoline
-RUN git checkout 64492c35db0d6fb3074488119e6428d2402c1025
+RUN git checkout c8881a9b7608365c4d6893e9582ffba56607d545
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/root/mpitrampoline

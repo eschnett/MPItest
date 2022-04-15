@@ -33,6 +33,7 @@ cd "$path/MPItest"
 cmake -S . -B build                                                     \
       -DMPIEXEC_EXECUTABLE="$path/local/mpitrampoline/bin/mpiexec"      \
       -DCMAKE_BUILD_TYPE=Debug                                          \
+      -DCMAKE_Fortran_FLAGS=-fcray-pointer                              \
       -DCMAKE_INSTALL_PREFIX="$path/local/mpitest"
 cmake --build build
 cmake --install build
@@ -84,7 +85,6 @@ case OpenMPI in
             -DMPIEXEC_EXECUTABLE=/cm/shared/apps/openmpi/gcc-9/64/4.1.0/bin/mpiexec     \
         "
         MPITEST_SET_ENVVARS='
-            export MPITRAMPOLINE_DLOPEN_MODE=dlopen
             export OMPI_MCA_btl_openib_allow_ib=true
         '
         MPITEST_MPIEXEC_OPTIONS="               \
@@ -92,8 +92,10 @@ case OpenMPI in
             -display-map                        \
             -report-bindings                    \
             -tag-output                         \
+            -mca btl self,vader,openib          \
             -mca btl_base_verbose 100           \
         "
+
         ;;
 
     *)
@@ -139,8 +141,6 @@ $MPITEST_SET_ENVVARS
 export MPITRAMPOLINE_VERBOSE=1
 export MPITRAMPOLINE_MPIEXEC="$path/local/mpiwrapper/bin/mpiwrapperexec"
 export MPITRAMPOLINE_LIB="$path/local/mpiwrapper/lib/libmpiwrapper.so"
-# export MPITRAMPOLINE_DLOPEN_MODE=dlopen
-# export MPITRAMPOLINE_DLOPEN_BINDING=now
 
 for exe in                                              \
     "$path/local/mpitest/bin/mpi-test-c"                \

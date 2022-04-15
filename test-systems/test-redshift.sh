@@ -16,6 +16,9 @@ git clone https://github.com/eschnett/MPItrampoline
 cd "$path/MPItrampoline"
 cmake -S . -B build                                             \
       -DCMAKE_BUILD_TYPE=Debug                                  \
+      -DCMAKE_C_COMPILER=/opt/local/bin/gcc                     \
+      -DCMAKE_CXX_COMPILER=/opt/local/bin/g++                   \
+      -DCMAKE_Fortran_COMPILER=/opt/local/bin/gfortran          \
       -DCMAKE_INSTALL_PREFIX="$path/local/mpitrampoline"
 cmake --build build
 cmake --install build
@@ -34,11 +37,16 @@ cmake --install build
 cd "$path"
 
 # Install MPIwrapper
-case OpenMPI in
+case MPICH in
 
     MPICH)
+        # MPITEST_CMAKE_OPTIONS="                                                 \
+        #     -DMPIEXEC_EXECUTABLE=/Users/eschnett/mpich-3.4.2/bin/mpiexec        \
+        # "
         MPITEST_CMAKE_OPTIONS="                                                 \
-            -DMPIEXEC_EXECUTABLE=/Users/eschnett/mpich-3.4.2/bin/mpiexec        \
+            -DCMAKE_C_COMPILER=/Users/eschnett/mpich-3.4.2/bin/mpicc            \
+            -DCMAKE_CXX_COMPILER=/Users/eschnett/mpich-3.4.2/bin/mpicxx         \
+            -DCMAKE_Fortran_COMPILER=/Users/eschnett/mpich-3.4.2/bin/mpifort    \
         "
         MPITEST_SET_ENVVARS=''
         MPITEST_MPIEXEC_OPTIONS='-prepend-rank'
