@@ -70,6 +70,17 @@ env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/bin/mpiwrapper
 env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-mpi_f08-f90
 ```
 
+## MPICH
+
+```sh
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-c
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-cxx
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-mpif-f
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-mpif-f90
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-mpi-f90
+env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-mpich/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-mpich/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest-mpihome/bin/mpi-test-mpi_f08-f90
+```
+
 # 
 
 env MPITRAMPOLINE_MPIEXEC=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/bin/mpiwrapperexec MPITRAMPOLINE_LIB=$HOME/src/c/MPIstuff/mpiwrapper-openmpi/lib/libmpiwrapper.so $HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -n 4 $HOME/src/c/MPIstuff/mpitest/bin/mpi-test-c
