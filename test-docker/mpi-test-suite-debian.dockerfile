@@ -3,7 +3,7 @@
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
-FROM ${cpuarch}/debian:11.3
+FROM ${cpuarch}/debian:11.4
 
 ARG mpivendor=MPICH             # MPICH, OpenMPI
 
@@ -19,6 +19,7 @@ RUN apt-get update && \
         build-essential \
         ca-certificates \
         cmake \
+        gcc \
         g++ \
         gdb \
         gengetopt \
@@ -40,9 +41,8 @@ ARG date=0
 RUN : $date
 
 # Install MPIwrapper
-RUN git clone -n https://github.com/eschnett/MPIwrapper
+RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout 554b7a6259bb2f1edb35e8dd1b7e14ca17ea6d81
 WORKDIR /cactus/MPIwrapper
-RUN git checkout f2a5e2098ae0eee4bebd18c4ad19f41ce6ac9064
 RUN which mpirun
 RUN cmake -S . -B build \
         -DCMAKE_CXX_COMPILER=mpicxx \
@@ -53,9 +53,8 @@ RUN cmake --install build
 WORKDIR /cactus
 
 # Install MPItrampoline
-RUN git clone -n https://github.com/eschnett/MPItrampoline
+RUN git clone -n https://github.com/eschnett/MPItrampoline && cd MPItrampoline && git checkout 7859bc963db9bff5ada5d8ce7909f8e0e6360e2d
 WORKDIR /cactus/MPItrampoline
-RUN git checkout c8881a9b7608365c4d6893e9582ffba56607d545
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/root/mpitrampoline
@@ -64,9 +63,8 @@ RUN cmake --install build
 WORKDIR /cactus
 
 # Install mpi-test-suite
-RUN git clone -n https://github.com/eschnett/mpi-test-suite
+RUN git clone -n https://github.com/eschnett/mpi-test-suite && cd mpi-test-suite && git checkout 98013e8522fd8c04fb88dabc06e19d5bf8ea37cf
 WORKDIR /cactus/mpi-test-suite
-RUN git checkout 98013e8522fd8c04fb88dabc06e19d5bf8ea37cf
 RUN ./autogen.sh
 RUN ./configure --prefix=/root/mpi-test-suite CC=/root/mpitrampoline/bin/mpicc LIBS=-lpthread
 RUN make -j$(nproc)
