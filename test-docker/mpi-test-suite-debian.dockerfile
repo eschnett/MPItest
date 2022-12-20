@@ -41,7 +41,7 @@ ARG date=0
 RUN : $date
 
 # Install MPIwrapper
-RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout 2fd7c1e609feca96e6dbcbf52a146d49e5650669
+RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout b4b8d61a389fdf878d217ad942776bc07b20f339
 WORKDIR /cactus/MPIwrapper
 RUN which mpirun
 RUN cmake -S . -B build \
@@ -53,7 +53,7 @@ RUN cmake --install build
 WORKDIR /cactus
 
 # Install MPItrampoline
-RUN git clone -n https://github.com/eschnett/MPItrampoline && cd MPItrampoline && git checkout ef19e14a2d8feffee524af7f2a7541b2f6195fba
+RUN git clone -n https://github.com/eschnett/MPItrampoline && cd MPItrampoline && git checkout 9e78dc3d189bef7714ec0921f01a79662a323e62
 WORKDIR /cactus/MPItrampoline
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
