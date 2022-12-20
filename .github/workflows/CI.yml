@@ -20,8 +20,8 @@ jobs:
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
-        mpitrampoline: [96e788647996bd53f648fd536c1aa8a14adfa62e]
-        mpiwrapper: [1d32e6855d5d2e92f1080d2ed76361be759a59a9]
+        mpitrampoline: [ef19e14a2d8feffee524af7f2a7541b2f6195fba]
+        mpiwrapper: [2fd7c1e609feca96e6dbcbf52a146d49e5650669]
         exclude:
           - os: macos-11
             shared: ON
@@ -65,7 +65,7 @@ jobs:
         macOS)
             case ${{matrix.mpi}} in
             MPICH)
-                wget https://www.mpich.org/static/downloads/4.0.1/mpich-4.0.1.tar.gz
+                wget https://www.mpich.org/static/downloads/4.0.3/mpich-4.0.3.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
                 # Use GCC-11 from Homebrew
@@ -100,7 +100,7 @@ jobs:
                 make -j2 install
                 ;;
             OpenMPI)
-                wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.2.tar.gz
+                wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.4.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
                 # Use GCC-11 from Homebrew
@@ -110,7 +110,7 @@ jobs:
                 export FC=gfortran-11
                 # On macOS, MPItrampoline works only for statically
                 # linked OpenMPI libraries.
-                find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g'
+                find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g;s/\$\{wl\}-flat_namespace//g'
                 ./autogen.pl --force
                 export CFLAGS='-fPIC -DPIC'
                 export CXXLAGS='-fPIC -DPIC'

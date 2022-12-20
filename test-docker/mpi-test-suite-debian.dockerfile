@@ -41,7 +41,7 @@ ARG date=0
 RUN : $date
 
 # Install MPIwrapper
-RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout 554b7a6259bb2f1edb35e8dd1b7e14ca17ea6d81
+RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout 2fd7c1e609feca96e6dbcbf52a146d49e5650669
 WORKDIR /cactus/MPIwrapper
 RUN which mpirun
 RUN cmake -S . -B build \
@@ -53,7 +53,7 @@ RUN cmake --install build
 WORKDIR /cactus
 
 # Install MPItrampoline
-RUN git clone -n https://github.com/eschnett/MPItrampoline && cd MPItrampoline && git checkout 7859bc963db9bff5ada5d8ce7909f8e0e6360e2d
+RUN git clone -n https://github.com/eschnett/MPItrampoline && cd MPItrampoline && git checkout ef19e14a2d8feffee524af7f2a7541b2f6195fba
 WORKDIR /cactus/MPItrampoline
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Debug \
@@ -71,6 +71,7 @@ RUN make -j$(nproc)
 RUN make -j$(nproc) install
 WORKDIR /cactus
 
+# TODO: This should be `docker run` instead
 # Run mpi-test-suite
 ENV MPITRAMPOLINE_VERBOSE=1
 ENV MPITRAMPOLINE_MPIEXEC=/root/mpiwrapper/bin/mpiwrapperexec
