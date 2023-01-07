@@ -3,7 +3,7 @@
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
-FROM ${cpuarch}/debian:11.4
+FROM ${cpuarch}/debian:11.5
 
 ARG mpivendor=MPICH             # MPICH, OpenMPI
 
@@ -41,7 +41,7 @@ ARG date=0
 RUN : $date
 
 # Install MPIwrapper
-RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout b4b8d61a389fdf878d217ad942776bc07b20f339
+RUN git clone -n https://github.com/eschnett/MPIwrapper && cd MPIwrapper && git checkout aaefda8d03745b3aeda7e5bbd3f2a6e602e085da
 WORKDIR /cactus/MPIwrapper
 RUN which mpirun
 RUN cmake -S . -B build \
