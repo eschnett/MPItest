@@ -47,6 +47,8 @@ int main(int argc, char **argv) {
   int processor_name_length;
   fprintf(stderr, "MPI_Get_processor_name\n");
   MPI_Get_processor_name(processor_name, &processor_name_length);
+  assert(processor_name_length >= 0 && processor_name_length < MPI_MAX_PROCESSOR_NAME);
+  assert(processor_name[processor_name_length] == '\0');
   printf("size: %d, rank: %d, processor name: \"%s\"\n", size, rank,
          processor_name);
 

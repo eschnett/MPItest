@@ -3,6 +3,9 @@ program mpi_test_f90
   include "mpif.h"
 
   integer rank, size
+  character*(MPI_MAX_PROCESSOR_NAME) processor_name
+  integer processor_name_length
+
   integer isend, irecv
   integer count
 
@@ -17,7 +20,11 @@ program mpi_test_f90
 
   call MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
   call MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
-  print '("size: ",i0,", rank: ",i0)', size, rank
+  call MPI_Get_processor_name(processor_name, processor_name_length, ierror)
+  if (processor_name_length > MPI_MAX_PROCESSOR_NAME) stop
+  if (len_trim(processor_name(processor_name_length + 1 :)) > 0) stop
+  print '("size: ",i0,", rank: ",i0," processor name: """,a,"""")', &
+       size, rank, trim(processor_name)
 
   isend = 42
   irecv = -1
