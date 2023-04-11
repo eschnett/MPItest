@@ -29,7 +29,7 @@ jobs:
     runs-on: ${{matrix.os}}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Install system packages
       run: |
@@ -51,7 +51,7 @@ jobs:
 
     - name: Cache MPI
       id: cache-mpi
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{github.workspace}}/mpi
         key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}-v2
