@@ -2,6 +2,8 @@
       implicit none
       include "mpif.h"
 
+      integer initialized, finalized
+
       integer rank, size
       character*(MPI_MAX_PROCESSOR_NAME) processor_name
       integer processor_name_length
@@ -16,7 +18,15 @@
 
       print '("mpi_test_f")'
 
+      call MPI_Initialized(initialized, ierror)
+      if (initialized /= 0) stop
+      call MPI_Finalized(finalized, ierror)
+      if (finalized /= 0) stop
       call MPI_Init(ierror)
+      call MPI_Initialized(initialized, ierror)
+      if (initialized /= 1) stop
+      call MPI_Finalized(finalized, ierror)
+      if (finalized /= 0) stop
 
       call MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
       call MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
@@ -62,6 +72,10 @@
       if (ivalue /= isum) call MPI_Abort(MPI_COMM_WORLD, 8, ierror)
 
       call MPI_Finalize(ierror)
+      call MPI_Initialized(initialized, ierror)
+c     if (initialized /= 1) stop
+      call MPI_Finalized(finalized, ierror)
+      if (finalized /= 1) stop
 
       print '("Done.")'
 
