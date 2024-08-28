@@ -16,20 +16,20 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04, macos-13]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
         mpitrampoline: [9c571c8ec57176decb7fc5c8085db3a60486a96f]
         mpiwrapper: [5cfadb092a1e49ede3f1b794a4aee34783b0a21d]
         exclude:
-          - os: macos-11
+          - os: macos-13
             shared: ON
 
     runs-on: ${{matrix.os}}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install system packages
       run: |
@@ -51,7 +51,7 @@ jobs:
 
     - name: Cache MPI
       id: cache-mpi
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{github.workspace}}/mpi
         key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}-v2
