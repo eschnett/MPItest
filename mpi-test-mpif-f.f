@@ -67,6 +67,10 @@
       if (ivalue /= 1) call MPI_Abort(MPI_COMM_WORLD, 6, ierror)
       if (isum /= size) call MPI_Abort(MPI_COMM_WORLD, 7, ierror)
       print '("MPI_Allreduce (in place)")'
+      print '("   loc(MPI_BOTTOM_PTR)=",i0)', loc(MPI_BOTTOM_PTR)
+      print '("   MPI_BOTTOM_PTR=",i0)', MPI_BOTTOM_PTR
+      print '("   loc(MPI_BOTTOM)=",i0)', loc(MPI_BOTTOM)
+      print '("   MPI_BOTTOM=",i0)', MPI_BOTTOM
       print '("   loc(MPI_IN_PLACE_PTR)=",i0)', loc(MPI_IN_PLACE_PTR)
       print '("   MPI_IN_PLACE_PTR=",i0)', MPI_IN_PLACE_PTR
       print '("   loc(MPI_IN_PLACE)=",i0)', loc(MPI_IN_PLACE)
