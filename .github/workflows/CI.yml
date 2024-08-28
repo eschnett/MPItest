@@ -16,7 +16,7 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        os: [ubuntu-20.04, macos-13]
+        os: [ubuntu-24.04, macos-13]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
@@ -68,11 +68,11 @@ jobs:
                 wget https://www.mpich.org/static/downloads/4.0.3/mpich-4.0.3.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
-                # Use GCC-11 from Homebrew
-                export CC=gcc-11
-                export CXX=g++-11
-                export F77=gfortran-11
-                export FC=gfortran-11
+                # Use GCC-14 from Homebrew
+                export CC=gcc-14
+                export CXX=g++-14
+                export F77=gfortran-14
+                export FC=gfortran-14
                 if [ ${{matrix.shared}} = OFF ]; then
                     export FFLAGS='-fallow-argument-mismatch'
                     export FCFLAGS='-fallow-argument-mismatch'
@@ -103,11 +103,11 @@ jobs:
                 wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.4.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
-                # Use GCC-11 from Homebrew
-                export CC=gcc-11
-                export CXX=g++-11
-                export F77=gfortran-11
-                export FC=gfortran-11
+                # Use GCC-14 from Homebrew
+                export CC=gcc-14
+                export CXX=g++-14
+                export F77=gfortran-14
+                export FC=gfortran-14
                 # On macOS, MPItrampoline works only for statically
                 # linked OpenMPI libraries.
                 find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g;s/\$\{wl\}-flat_namespace//g'
@@ -156,10 +156,10 @@ jobs:
             # do nothing
             ;;
         macOS)
-            # Use GCC-11 from Homebrew
-            export CC=gcc-11
-            export CXX=g++-11
-            export FC=gfortran-11
+            # Use GCC-14 from Homebrew
+            export CC=gcc-14
+            export CXX=g++-14
+            export FC=gfortran-14
             ;;
         esac
         cmake -S . -B build \
@@ -178,10 +178,10 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-11 from Homebrew
-            export CC=gcc-11
-            export CXX=g++-11
-            export FC=gfortran-11
+            # Use GCC-14 from Homebrew
+            export CC=gcc-14
+            export CXX=g++-14
+            export FC=gfortran-14
             # Not needed for CMAKE_C_COMPILER
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
             ;;
@@ -219,14 +219,14 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-11 from Homebrew
-            export CC=gcc-11
-            export CXX=g++-11
-            export FC=gfortran-11
+            # Use GCC-14 from Homebrew
+            export CC=gcc-14
+            export CXX=g++-14
+            export FC=gfortran-14
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
-            export MPITRAMPOLINE_CC=gcc-11
-            export MPITRAMPOLINE_CXX=g++-11
-            export MPITRAMPOLINE_FC=gfortran-11
+            export MPITRAMPOLINE_CC=gcc-14
+            export MPITRAMPOLINE_CXX=g++-14
+            export MPITRAMPOLINE_FC=gfortran-14
             ;;
         esac
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
