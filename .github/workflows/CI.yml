@@ -124,7 +124,8 @@ jobs:
                     --disable-shared \
                     --enable-mpi-fortran=usempif08 \
                     --enable-static \
-                    --prefix=${{github.workspace}}/mpi
+                    --prefix=${{github.workspace}}/mpi \
+                    --with-libevent=internal
                 make -j2
                 make -j2 install
                 ;;
