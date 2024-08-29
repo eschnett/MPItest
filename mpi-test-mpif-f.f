@@ -16,7 +16,7 @@
       integer status(MPI_STATUS_SIZE)
       integer ierror
 
-      print '("mpi_test_f")'
+      print '("mpi_test_mpif_f")'
 
       call MPI_Initialized(initialized, ierror)
       if (initialized /= 0) stop
@@ -37,6 +37,7 @@
      &     stop
       print '("size: ",i0,", rank: ",i0," processor name: """,a,"""")',
      &     size, rank, trim(processor_name)
+      if (size == 1) call MPI_Abort(MPI_COMM_WORLD, 1, ierror)
 
       isend = 42
       irecv = -1

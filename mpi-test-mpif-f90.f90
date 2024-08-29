@@ -14,7 +14,7 @@ program mpi_test_f90
   integer status(MPI_STATUS_SIZE)
   integer ierror
 
-  print '("mpi_test_f90")'
+  print '("mpi_test_mpif_f90")'
 
   call MPI_Init(ierror)
 
