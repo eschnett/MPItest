@@ -22,7 +22,7 @@ add_executable(mpi-test-cxx mpi-test-cxx.cxx)
 target_link_libraries(mpi-test-cxx PUBLIC MPI::MPI_CXX)
 
 add_executable(mpi-test-mpif-f mpi-test-mpif-f.f mpi-test-mpif-f-c.c)
-target_link_libraries(mpi-test-mpif-f PUBLIC MPI::MPI_Fortran)
+target_link_libraries(mpi-test-mpif-f PUBLIC MPI::MPI_Fortran MPI::MPI_C)
 
 add_executable(mpi-test-mpif-f90 mpi-test-mpif-f90.f90)
 target_link_libraries(mpi-test-mpif-f90 PUBLIC MPI::MPI_Fortran)
