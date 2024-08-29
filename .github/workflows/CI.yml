@@ -17,12 +17,12 @@ jobs:
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
         # Note: macos-13 is Intel, macos-14 is ARM
-        os: [ubuntu-24.04, macos-13] #TODO, macos-14]
+        os: [ubuntu-24.04, macos-13, macos-14]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
         mpitrampoline: [1c64b877799954f40b5d88c06a259e1a99a9676d]
-        mpiwrapper: [23e2b3eb34a0e0804773ed42a0a4012a048b48c4]
+        mpiwrapper: [631e168a628e87dd684ada03ebed8f8f2a188052]
         exclude:
           - os: macos-13
             shared: ON
