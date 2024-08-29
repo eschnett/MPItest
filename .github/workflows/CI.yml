@@ -16,13 +16,18 @@ jobs:
         # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
+        #
         # Note: macos-13 is Intel, macos-14 is ARM
-        os: [ubuntu-24.04, macos-13, macos-14]
+        #
+        # MPICH is broken on Ubuntu 24.04; see
+        # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
+        # and Debian works as well.
+        os: [ubuntu-23.10, macos-13, macos-14]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         shared: [OFF, ON]
-        mpitrampoline: [68e6c5c4e9877b62cf4166b68e14b27f54435505]
-        mpiwrapper: [6f4411969dca9d036fe37d9e71bad4cc7d81d8e9]
+        mpitrampoline: [3bdd20528cf874615eae518decfa91334cbbe128]
+        mpiwrapper: [3e68cd837a5c3c737a88d44b1e65f7051e956206]
         exclude:
           - os: macos-13
             shared: ON

@@ -6,7 +6,7 @@
 
 ```sh
 rm -rf mpitest-mpiexec $HOME/src/c/MPIstuff/mpitest-mpiexec
-cmake -S . -B mpitest-mpiexec -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpiexec
+cmake -S . -B mpitest-mpiexec -G Ninja -DCMAKE_C_COMPILER=gcc-mp-12 -DCMAKE_CXX_COMPILER=g++-mp-12 -DCMAKE_Fortran_COMPILER=gfortran-mp-12 -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpiexec
 cmake --build mpitest-mpiexec && cmake --install mpitest-mpiexec
 ```
 
@@ -14,7 +14,7 @@ cmake --build mpitest-mpiexec && cmake --install mpitest-mpiexec
 
 ```sh
 rm -rf mpitest-mpiexec $HOME/src/c/MPIstuff/mpitest-mpiexec
-cmake -S . -B mpitest-mpiexec -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpiexec
+cmake -S . -B mpitest-mpiexec -G Ninja -DCMAKE_C_COMPILER=gcc-mp-12 -DCMAKE_CXX_COMPILER=g++-mp-12 -DCMAKE_Fortran_COMPILER=gfortran-mp-12 -DMPIEXEC_EXECUTABLE=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpiexec -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpiexec
 cmake --build mpitest-mpiexec && cmake --install mpitest-mpiexec
 ```
 
@@ -22,7 +22,7 @@ cmake --build mpitest-mpiexec && cmake --install mpitest-mpiexec
 
 ```sh
 rm -rf mpitest-mpihome $HOME/src/c/MPIstuff/mpitest-mpihome
-cmake -S . -B mpitest-mpihome -G Ninja -DCMAKE_C_COMPILER=gcc-mp-11 -DCMAKE_CXX_COMPILER=g++-mp-11 -DCMAKE_Fortran_COMPILER=gfortran-mp-11 -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' -DMPI_HOME=$HOME/src/c/MPIstuff/mpitrampoline -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpihome
+cmake -S . -B mpitest-mpihome -G Ninja -DCMAKE_C_COMPILER=gcc-mp-12 -DCMAKE_CXX_COMPILER=g++-mp-12 -DCMAKE_Fortran_COMPILER=gfortran-mp-12 -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch -fcray-pointer' -DMPI_HOME=$HOME/src/c/MPIstuff/mpitrampoline -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-mpihome
 cmake --build mpitest-mpihome && cmake --install mpitest-mpihome
 ```
 
@@ -30,7 +30,7 @@ cmake --build mpitest-mpihome && cmake --install mpitest-mpihome
 
 ```sh
 rm -rf mpitest-compilers $HOME/src/c/MPIstuff/mpitest-compilers
-env MPITRAMPOLINE_CC=gcc-mp-11 MPITRAMPOLINE_CXX=g++-mp-11 MPITRAMPOLINE_FC=gfortran-mp-11 cmake -S . -B mpitest-compilers -G Ninja -DCMAKE_C_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicc -DCMAKE_CXX_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicxx -DCMAKE_Fortran_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpifc -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-compilers
+env MPITRAMPOLINE_CC=gcc-mp-12 MPITRAMPOLINE_CXX=g++-mp-12 MPITRAMPOLINE_FC=gfortran-mp-12 cmake -S . -B mpitest-compilers -G Ninja -DCMAKE_C_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicc -DCMAKE_CXX_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpicxx -DCMAKE_Fortran_COMPILER=$HOME/src/c/MPIstuff/mpitrampoline/bin/mpifc -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/src/c/MPIstuff/mpitest-compilers
 cmake --build mpitest-compilers && cmake --install mpitest-compilers
 ```
 

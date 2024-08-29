@@ -3,7 +3,11 @@
 
 ARG cpuarch=amd64 # amd64, arm32v5, arm32v7, arm64v8, i386, mips64le, ppc64le, riscv64
 
-FROM ${cpuarch}/debian:12.6
+FROM ${cpuarch}/ubuntu:23.10
+# MPICH is broken on Ubuntu 24.04; see
+# <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
+# and Debian works as well.
+# FROM ${cpuarch}/ubuntu:24.04
 
 ARG mpivendor=MPICH             # MPICH, OpenMPI
 
