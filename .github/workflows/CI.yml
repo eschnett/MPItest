@@ -140,15 +140,15 @@ jobs:
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
         git checkout ${{matrix.mpiwrapper}}
-        cmake -S . -B build \
+        cmake -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_C_COMPILER=mpicc \
             -DCMAKE_CXX_COMPILER=mpicxx \
             -DCMAKE_Fortran_COMPILER=mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        cmake --build build --config ${{env.BUILD_TYPE}}
-        cmake --install build --config ${{env.BUILD_TYPE}}
+        cmake --build build
+        cmake --install build
 
     - name: Install MPItrampoline
       run: |
@@ -166,7 +166,7 @@ jobs:
             export FC=gfortran-14
             ;;
         esac
-        cmake -S . -B build \
+        cmake -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DBUILD_SHARED_LIBS=${{matrix.shared}} \
@@ -233,10 +233,10 @@ jobs:
             export MPITRAMPOLINE_FC=gfortran-14
             ;;
         esac
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake --build ${{github.workspace}}/build
 
     - name: Install tests
-      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --install ${{github.workspace}}/build
 
     - name: Test C ${{matrix.mpi}}
       run: |
