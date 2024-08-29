@@ -28,6 +28,16 @@
       call MPI_Finalized(finalized, ierror)
       if (finalized /= 0) stop
 
+!TODO call some_c_stuff()
+!TODO print '("   loc(MPI_BOTTOM_PTR)=",i0)', loc(MPI_BOTTOM_PTR)
+!TODO print '("   MPI_BOTTOM_PTR=",i0)', MPI_BOTTOM_PTR
+      print '("   loc(MPI_BOTTOM)=",i0)', loc(MPI_BOTTOM)
+      print '("   MPI_BOTTOM=",i0)', MPI_BOTTOM
+!TODO print '("   loc(MPI_IN_PLACE_PTR)=",i0)', loc(MPI_IN_PLACE_PTR)
+!TODO print '("   MPI_IN_PLACE_PTR=",i0)', MPI_IN_PLACE_PTR
+      print '("   loc(MPI_IN_PLACE)=",i0)', loc(MPI_IN_PLACE)
+      print '("   MPI_IN_PLACE=",i0)', MPI_IN_PLACE
+
       call MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
       call MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
       call MPI_Get_processor_name(processor_name, processor_name_length,
@@ -68,15 +78,6 @@
       if (ivalue /= 1) call MPI_Abort(MPI_COMM_WORLD, 6, ierror)
       if (isum /= size) call MPI_Abort(MPI_COMM_WORLD, 7, ierror)
       print '("MPI_Allreduce (in place)")'
-!TODO call some_c_stuff()
-!TODO print '("   loc(MPI_BOTTOM_PTR)=",i0)', loc(MPI_BOTTOM_PTR)
-!TODO print '("   MPI_BOTTOM_PTR=",i0)', MPI_BOTTOM_PTR
-      print '("   loc(MPI_BOTTOM)=",i0)', loc(MPI_BOTTOM)
-      print '("   MPI_BOTTOM=",i0)', MPI_BOTTOM
-!TODO print '("   loc(MPI_IN_PLACE_PTR)=",i0)', loc(MPI_IN_PLACE_PTR)
-!TODO print '("   MPI_IN_PLACE_PTR=",i0)', MPI_IN_PLACE_PTR
-      print '("   loc(MPI_IN_PLACE)=",i0)', loc(MPI_IN_PLACE)
-      print '("   MPI_IN_PLACE=",i0)', MPI_IN_PLACE
       call MPI_Allreduce(MPI_IN_PLACE, ivalue, 1, MPI_INTEGER, MPI_SUM,
      &     MPI_COMM_WORLD, ierror)
       print '("   ivalue=",i0)', ivalue
