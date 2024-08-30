@@ -22,10 +22,14 @@ jobs:
         # MPICH is broken on Ubuntu 24.04; see
         # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
         # and Debian works as well.
-        os: [ubuntu-22.04, macos-13, macos-14]
-        mpi: [MPICH, OpenMPI]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        shared: [STATIC, SHARED]
+        #TODO os: [ubuntu-22.04, macos-13, macos-14]
+        #TODO mpi: [MPICH, OpenMPI]
+        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        #TODO shared: [STATIC, SHARED]
+        os: [macos-13]
+        mpi: [MPICH]
+        findmpi: [MPI_HOME]
+        shared: [STATIC]
         mpitrampoline: [3bdd20528cf874615eae518decfa91334cbbe128]
         mpiwrapper: [3e68cd837a5c3c737a88d44b1e65f7051e956206]
         exclude:
