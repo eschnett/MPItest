@@ -25,14 +25,14 @@ jobs:
         os: [ubuntu-22.04, macos-13, macos-14]
         mpi: [MPICH, OpenMPI]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        shared: [OFF, ON]
+        shared: [STATIC, SHARED]
         mpitrampoline: [3bdd20528cf874615eae518decfa91334cbbe128]
         mpiwrapper: [3e68cd837a5c3c737a88d44b1e65f7051e956206]
         exclude:
           - os: macos-13
-            shared: ON
+            shared: SHARED
           - os: macos-14
-            shared: ON
+            shared: SHARED
 
     runs-on: ${{matrix.os}}
 
@@ -81,21 +81,9 @@ jobs:
                 export CXX=g++-14
                 export F77=gfortran-14
                 export FC=gfortran-14
-                if [ ${{matrix.shared}} = OFF ]; then
-                    export FFLAGS='-fallow-argument-mismatch'
-                    export FCFLAGS='-fallow-argument-mismatch'
-                    ./configure \
-                        --disable-opencl \
-                        --enable-threads=multiple \
-                        --enable-two-level-namespace \
-                        --prefix=${{github.workspace}}/mpi
-                else
-                    # On macOS, MPItrampoline shared libraries work
-                    # only for statically linked MPICH libraries.
-                    export CFLAGS='-fPIC -DPIC'
-                    export CXXLAGS='-fPIC -DPIC'
-                    export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                    export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
+                export FFLAGS="-fallow-argument-mismatch"
+                export FCFLAGS="-fallow-argument-mismatch"
+                if [ ${{matrix.shared}} = STATIC ]; then
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
@@ -103,9 +91,21 @@ jobs:
                         --enable-threads=multiple \
                         --enable-two-level-namespace \
                         --prefix=${{github.workspace}}/mpi
+                else
+                    # On macOS, MPItrampoline shared libraries work
+                    # only for statically linked MPICH libraries.
+                    export CFLAGS="-fPIC -DPIC"
+                    export CXXLAGS="-fPIC -DPIC"
+                    export FFLAGS="-fPIC -DPIC $FFLAGS"
+                    export FCFLAGS="-fPIC -DPIC $FCFLAGS"
+                    ./configure \
+                        --disable-opencl \
+                        --enable-threads=multiple \
+                        --enable-two-level-namespace \
+                        --prefix=${{github.workspace}}/mpi
                 fi
-                make -j2
-                make -j2 install
+                make -j$(nproc)
+                make -j$(nproc) install
                 ;;
             OpenMPI)
                 wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.5.tar.gz
@@ -131,8 +131,8 @@ jobs:
                     --enable-static \
                     --prefix=${{github.workspace}}/mpi \
                     --with-libevent=internal
-                make -j2
-                make -j2 install
+                make -j$(nproc)
+                make -j$(nproc) install
                 ;;
             esac
             ;;
@@ -152,8 +152,8 @@ jobs:
             -DCMAKE_Fortran_COMPILER=mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
-        cmake --build build
-        cmake --install build
+        cmake --build build --parallel $(nproc)
+        cmake --install build --parallel $(nproc)
 
     - name: Install MPItrampoline
       run: |
@@ -176,8 +176,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DBUILD_SHARED_LIBS=${{matrix.shared}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
-        cmake --build build
-        cmake --install build
+        cmake --build build --parallel $(nproc)
+        cmake --install build --parallel $(nproc)
 
     - name: Configure Tests
       run: |
@@ -238,7 +238,7 @@ jobs:
             export MPITRAMPOLINE_FC=gfortran-14
             ;;
         esac
-        cmake --build ${{github.workspace}}/build
+        cmake --build ${{github.workspace}}/build --parallel $(nproc)
 
     - name: Install tests
       run: cmake --install ${{github.workspace}}/build
