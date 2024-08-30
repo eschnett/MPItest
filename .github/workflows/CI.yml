@@ -150,7 +150,7 @@ jobs:
             ;;
         esac
 
-    - name: Install MPIwrapper/${{matrix.mpi}}
+    - name: Install MPIwrapper
       run: |
         # See MPIwrapper
         # export PATH="${{github.workspace}}/mpi/bin:$PATH"
@@ -175,7 +175,8 @@ jobs:
             -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpicxx \
             -DCMAKE_Fortran_COMPILER=${{github.workspace}}/mpi/bin/mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
+            -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
         cmake --build build --parallel 2
         cmake --install build
 
