@@ -84,10 +84,14 @@ jobs:
                 export FFLAGS="-fallow-argument-mismatch"
                 export FCFLAGS="-fallow-argument-mismatch"
                 if [ ${{matrix.shared}} = STATIC ]; then
+                    # ./configure \
+                    #     --disable-opencl \
+                    #     --disable-shared \
+                    #     --enable-static \
+                    #     --enable-threads=multiple \
+                    #     --prefix=${{github.workspace}}/mpi
                     ./configure \
                         --disable-opencl \
-                        --disable-shared \
-                        --enable-static \
                         --enable-threads=multiple \
                         --enable-two-level-namespace \
                         --prefix=${{github.workspace}}/mpi
