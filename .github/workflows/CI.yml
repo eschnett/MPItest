@@ -80,20 +80,18 @@ jobs:
                 wget https://www.mpich.org/static/downloads/4.2.2/mpich-4.2.2.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
-                # Use GCC-14 from Homebrew
-                export CC=gcc-14
-                export CXX=g++-14
-                export F77=gfortran-14
-                export FC=gfortran-14
-                export FFLAGS="-fallow-argument-mismatch"
-                export FCFLAGS="-fallow-argument-mismatch"
                 if [ ${{matrix.shared}} = STATIC ]; then
+                    # Use GCC-14 from Homebrew
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
                         --enable-static \
                         --enable-threads=multiple \
-                        --prefix=${{github.workspace}}/mpi
+                        --prefix=${{github.workspace}}/mpi \
+                        CC=gcc-14 \
+                        CXX=g++-14 \
+                        F77=gfortran-14 \
+                        FC=gfortran-14
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
@@ -103,10 +101,15 @@ jobs:
                     exit 1
                     # On macOS, MPItrampoline shared libraries work
                     # only for statically linked MPICH libraries.
+                    # Use GCC-14 from Homebrew
+                    export CC=gcc-14
+                    export CXX=g++-14
+                    export F77=gfortran-14
+                    export FC=gfortran-14
                     export CFLAGS="-fPIC -DPIC"
                     export CXXLAGS="-fPIC -DPIC"
-                    export FFLAGS="-fPIC -DPIC $FFLAGS"
-                    export FCFLAGS="-fPIC -DPIC $FCFLAGS"
+                    export FFLAGS="-fPIC -DPIC -fallow-argument-mismatch"
+                    export FCFLAGS="-fPIC -DPIC -fallow-argument-mismatch"
                     ./configure \
                         --disable-opencl \
                         --enable-threads=multiple \
@@ -150,17 +153,29 @@ jobs:
     - name: Install MPIwrapper/${{matrix.mpi}}
       run: |
         # See MPIwrapper
-        export PATH="${{github.workspace}}/mpi/bin:$PATH"
+        # export PATH="${{github.workspace}}/mpi/bin:$PATH"
+        # git clone https://github.com/eschnett/MPIwrapper
+        # cd MPIwrapper
+        # git checkout ${{matrix.mpiwrapper}}
+        # cmake -B build \
+        #     -DCMAKE_VERBOSE_MAKEFILE=ON \
+        #     -DCMAKE_C_COMPILER=mpicc \
+        #     -DCMAKE_CXX_COMPILER=mpicxx \
+        #     -DCMAKE_Fortran_COMPILER=mpifort \
+        #     -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+        #     -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
+        # cmake --build build --parallel 2
+        # cmake --install build
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
         git checkout ${{matrix.mpiwrapper}}
         cmake -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_C_COMPILER=mpicc \
-            -DCMAKE_CXX_COMPILER=mpicxx \
-            -DCMAKE_Fortran_COMPILER=mpifort \
+            -DCMAKE_C_COMPILER=${{github.workspace}}/mpi/bin/mpicc \
+            -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpicxx \
+            -DCMAKE_Fortran_COMPILER=${{github.workspace}}/mpi/bin/mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper-${{matrix.mpi}}
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
         cmake --build build --parallel 2
         cmake --install build
 
@@ -259,8 +274,8 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-c
 
     - name: Test C++ ${{matrix.mpi}}
@@ -270,8 +285,8 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-cxx
 
     - name: Test Fortran 77 mpif ${{matrix.mpi}}
@@ -281,8 +296,8 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f
 
     - name: Test Fortran 90 mpif ${{matrix.mpi}}
@@ -292,8 +307,8 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpif-f90
 
     - name: Test Fortran 90 mpi ${{matrix.mpi}}
@@ -303,8 +318,8 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi-f90
 
     - name: Test Fortran 90 mpi_f08 ${{matrix.mpi}}
@@ -314,6 +329,6 @@ jobs:
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
         export MPITRAMPOLINE_VERBOSE=1
-        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper-${{matrix.mpi}}/bin/mpiwrapperexec
-        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper-${{matrix.mpi}}/lib/libmpiwrapper.so
+        export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
+        export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
         $HOME/mpitrampoline/bin/mpiexec ${mpiexec_options} -n 4 $HOME/mpitest/bin/mpi-test-mpi_f08-f90
