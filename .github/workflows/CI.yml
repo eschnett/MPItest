@@ -82,16 +82,22 @@ jobs:
                 cd mpich*
                 if [ ${{matrix.shared}} = STATIC ]; then
                     # Use GCC-14 from Homebrew
+                    # ./configure \
+                    #     --disable-opencl \
+                    #     --disable-shared \
+                    #     --enable-static \
+                    #     --enable-threads=multiple \
+                    #     --prefix=${{github.workspace}}/mpi \
+                    #     CC=gcc-14 \
+                    #     CXX=g++-14 \
+                    #     F77=gfortran-14 \
+                    #     FC=gfortran-14
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
                         --enable-static \
                         --enable-threads=multiple \
-                        --prefix=${{github.workspace}}/mpi \
-                        CC=gcc-14 \
-                        CXX=g++-14 \
-                        F77=gfortran-14 \
-                        FC=gfortran-14
+                        --prefix=${{github.workspace}}/mpi
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
