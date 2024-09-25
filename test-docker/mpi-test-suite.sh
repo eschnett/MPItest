@@ -10,7 +10,7 @@ date=date
 for cpuarch in $cpuarchs; do
     for distribution in $distributions; do
         for mpivendor in $mpivendors; do
-            tag="mpi-test-suite-debian.cpuarch-$cpuarch.distribution-$distribution.mpivendor-$mpivendor"
+            tag="mpi-test-suite-$distribution-$cpuarch-$mpivendor"
             rm -f "$tag".*
             {
                 docker build \

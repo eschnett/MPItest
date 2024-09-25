@@ -30,8 +30,8 @@ jobs:
         mpi: [MPICH]
         findmpi: [MPI_HOME]
         shared: [STATIC]
-        mpitrampoline: [3bdd20528cf874615eae518decfa91334cbbe128]
-        mpiwrapper: [3e68cd837a5c3c737a88d44b1e65f7051e956206]
+        mpitrampoline: [03089f7b0fbd99ad5a04419793ca0ff992b15891]
+        mpiwrapper: [2ffe646148a864478705d79ee0ab4e7b6d59084b]
         exclude:
           - os: macos-13
             shared: SHARED
@@ -82,22 +82,19 @@ jobs:
                 cd mpich*
                 if [ ${{matrix.shared}} = STATIC ]; then
                     # Use GCC-14 from Homebrew
-                    # ./configure \
-                    #     --disable-opencl \
-                    #     --disable-shared \
-                    #     --enable-static \
-                    #     --enable-threads=multiple \
-                    #     --prefix=${{github.workspace}}/mpi \
-                    #     CC=gcc-14 \
-                    #     CXX=g++-14 \
-                    #     F77=gfortran-14 \
-                    #     FC=gfortran-14
+                    ls -l /usr/local/bin/gcc*
+                    ls -l /usr/local/bin/g++*
+                    ls -l /usr/local/bin/gfortran*
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
                         --enable-static \
                         --enable-threads=multiple \
-                        --prefix=${{github.workspace}}/mpi
+                        --prefix=${{github.workspace}}/mpi \
+                        CC=gcc-14 \
+                        CXX=g++-14 \
+                        F77=gfortran-14 \
+                        FC=gfortran-14
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
