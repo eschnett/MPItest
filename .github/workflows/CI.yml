@@ -81,7 +81,7 @@ jobs:
                 tar xzf mpich*.tar.gz
                 cd mpich*
                 if [ ${{matrix.shared}} = STATIC ]; then
-                    # Use GCC-14 from Homebrew
+                    # Use GCC-13 from Homebrew
                     ls -l /usr/local/bin/gcc*
                     ls -l /usr/local/bin/g++*
                     ls -l /usr/local/bin/gfortran*
@@ -91,10 +91,10 @@ jobs:
                         --enable-static \
                         --enable-threads=multiple \
                         --prefix=${{github.workspace}}/mpi \
-                        CC=gcc-14 \
-                        CXX=g++-14 \
-                        F77=gfortran-14 \
-                        FC=gfortran-14
+                        CC=gcc-13 \
+                        CXX=g++-13 \
+                        F77=gfortran-13 \
+                        FC=gfortran-13
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
@@ -119,8 +119,8 @@ jobs:
                         --enable-two-level-namespace \
                         --prefix=${{github.workspace}}/mpi
                 fi
-                make -j2
-                make -j2 install
+                make -j4
+                make -j4 install
                 ;;
             OpenMPI)
                 wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.5.tar.gz
@@ -146,8 +146,8 @@ jobs:
                     --enable-static \
                     --prefix=${{github.workspace}}/mpi \
                     --with-libevent=internal
-                make -j2
-                make -j2 install
+                make -j4
+                make -j4 install
                 ;;
             esac
             ;;
@@ -167,7 +167,7 @@ jobs:
         #     -DCMAKE_Fortran_COMPILER=mpifort \
         #     -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
         #     -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
-        # cmake --build build --parallel 2
+        # cmake --build build --parallel 4
         # cmake --install build
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
@@ -180,7 +180,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
             -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
-        cmake --build build --parallel 2
+        cmake --build build --parallel 4
         cmake --install build
 
     - name: Install MPItrampoline
@@ -193,10 +193,10 @@ jobs:
             # do nothing
             ;;
         macOS)
-            # Use GCC-14 from Homebrew
-            export CC=gcc-14
-            export CXX=g++-14
-            export FC=gfortran-14
+            # Use GCC-13 from Homebrew
+            export CC=gcc-13
+            export CXX=g++-13
+            export FC=gfortran-13
             ;;
         esac
         cmake -B build \
@@ -204,7 +204,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DBUILD_SHARED_LIBS=${{matrix.shared}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpitrampoline
-        cmake --build build --parallel 2
+        cmake --build build --parallel 4
         cmake --install build
 
     - name: Configure Tests
@@ -215,10 +215,10 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-14 from Homebrew
-            export CC=gcc-14
-            export CXX=g++-14
-            export FC=gfortran-14
+            # Use GCC-13 from Homebrew
+            export CC=gcc-13
+            export CXX=g++-13
+            export FC=gfortran-13
             # Not needed for CMAKE_C_COMPILER
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
             ;;
@@ -256,17 +256,17 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-14 from Homebrew
-            export CC=gcc-14
-            export CXX=g++-14
-            export FC=gfortran-14
+            # Use GCC-13 from Homebrew
+            export CC=gcc-13
+            export CXX=g++-13
+            export FC=gfortran-13
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
-            export MPITRAMPOLINE_CC=gcc-14
-            export MPITRAMPOLINE_CXX=g++-14
-            export MPITRAMPOLINE_FC=gfortran-14
+            export MPITRAMPOLINE_CC=gcc-13
+            export MPITRAMPOLINE_CXX=g++-13
+            export MPITRAMPOLINE_FC=gfortran-13
             ;;
         esac
-        cmake --build ${{github.workspace}}/build --parallel 2
+        cmake --build ${{github.workspace}}/build --parallel 4
 
     - name: Install tests
       run: cmake --install ${{github.workspace}}/build
