@@ -36,15 +36,17 @@ jobs:
         - OpenMPI
         findmpi:
         - MPIEXEC_EXECUTABLE
-        #TODO - MPI_HOME
-        #TODO - CMAKE_C_COMPILER
+        - MPI_HOME
+        - CMAKE_C_COMPILER
         shared:
         - STATIC
-        #TODO - SHARED
+        - SHARED
         mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
         exclude:
         - os: ubuntu-24.04
+          mpi: MPICH
+        - os: ubuntu-24.04-arm
           mpi: MPICH
         #TODO   - os: macos-13
         #TODO     shared: SHARED
