@@ -8,6 +8,9 @@
       character*(MPI_MAX_PROCESSOR_NAME) processor_name
       integer processor_name_length
 
+      character*(100) comm_world_size_str
+      integer comm_world_size
+
       integer isend, irecv
       integer count
 
@@ -37,7 +40,19 @@
      &     stop
       print '("size: ",i0,", rank: ",i0," processor name: """,a,"""")',
      &     size, rank, trim(processor_name)
-      if (size == 1) call MPI_Abort(MPI_COMM_WORLD, 1, ierror)
+
+      call get_environment_variable("MPITEST_COMM_WORLD_SIZE",
+     &     comm_world_size_str, status=status)
+      if (status == 0) then
+         read(comm_world_size_str, *, iostat=status) comm_world_size
+         if (status /= 0) stop
+         if (size /= comm_world_size) then
+            print '("*** Error: MPI_COMM_WORLD has the wrong size.")'
+            print '("  Expected: ",i0)', comm_world_size
+            print '("  Found: ",i0)', size
+            call MPI_Abort(MPI_COMM_WORLD, 1, ierror)
+         end if
+      end if
 
       isend = 42
       irecv = -1

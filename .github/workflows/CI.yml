@@ -303,6 +303,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITEST_COMM_WORLD_SIZE=4
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
@@ -314,6 +315,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITEST_COMM_WORLD_SIZE=4
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
@@ -325,6 +327,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITEST_COMM_WORLD_SIZE=4
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
@@ -336,6 +339,7 @@ jobs:
             MPICH) mpiexec_options='';;
             OpenMPI) mpiexec_options='--oversubscribe';;
         esac
+        export MPITEST_COMM_WORLD_SIZE=4
         export MPITRAMPOLINE_VERBOSE=1
         export MPITRAMPOLINE_MPIEXEC=$HOME/mpiwrapper/bin/mpiwrapperexec
         export MPITRAMPOLINE_LIB=$HOME/mpiwrapper/lib/libmpiwrapper.so
