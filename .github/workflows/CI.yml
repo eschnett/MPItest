@@ -26,22 +26,26 @@ jobs:
         #TODO mpi: [MPICH, OpenMPI]
         #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         #TODO shared: [STATIC, SHARED]
-        os: [macos-13]
-        mpi: [MPICH]
-        findmpi: [MPI_HOME]
-        shared: [STATIC]
-        mpitrampoline: [03089f7b0fbd99ad5a04419793ca0ff992b15891]
-        mpiwrapper: [2ffe646148a864478705d79ee0ab4e7b6d59084b]
-        exclude:
-          - os: macos-13
-            shared: SHARED
-          - os: macos-14
-            shared: SHARED
+        os:
+        - ubuntu-24.04
+        - ubuntu-24.04-arm
+        - macos-15
+        - macos-15-intel
+        mpi: [MPICH, OpenMPI]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        shared: [STATIC, SHARED]
+        mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
+        mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
+        #TODO exclude:
+        #TODO   - os: macos-13
+        #TODO     shared: SHARED
+        #TODO   - os: macos-14
+        #TODO     shared: SHARED
 
     runs-on: ${{matrix.os}}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Install system packages
       run: |
@@ -63,10 +67,10 @@ jobs:
 
     - name: Cache MPI
       id: cache-mpi
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{github.workspace}}/mpi
-        key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}-v2
+        key: ${{runner.os}}-${{matrix.mpi}}-${{matrix.shared}}-v3
 
     - name: Install MPI ${{matrix.mpi}}
       if: steps.cache-mpi.outputs.cache-hit != 'true'
@@ -77,11 +81,11 @@ jobs:
         macOS)
             case ${{matrix.mpi}} in
             MPICH)
-                wget https://www.mpich.org/static/downloads/4.2.2/mpich-4.2.2.tar.gz
+                wget https://www.mpich.org/static/downloads/5.0.0/mpich-5.0.0.tar.gz
                 tar xzf mpich*.tar.gz
                 cd mpich*
                 if [ ${{matrix.shared}} = STATIC ]; then
-                    # Use GCC-13 from Homebrew
+                    # Use GCC-15 from Homebrew
                     ls -l /usr/local/bin/gcc*
                     ls -l /usr/local/bin/g++*
                     ls -l /usr/local/bin/gfortran*
@@ -91,24 +95,24 @@ jobs:
                         --enable-static \
                         --enable-threads=multiple \
                         --prefix=${{github.workspace}}/mpi \
-                        CC=gcc-13 \
-                        CXX=g++-13 \
-                        F77=gfortran-13 \
-                        FC=gfortran-13
+                        CC=gcc-15 \
+                        CXX=g++-15 \
+                        F77=gfortran-15 \
+                        FC=gfortran-15
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
                     #     --enable-two-level-namespace \
                     #     --prefix=${{github.workspace}}/mpi
                 else
-                    exit 1
+                    #TODO exit 1
                     # On macOS, MPItrampoline shared libraries work
                     # only for statically linked MPICH libraries.
-                    # Use GCC-14 from Homebrew
-                    export CC=gcc-14
-                    export CXX=g++-14
-                    export F77=gfortran-14
-                    export FC=gfortran-14
+                    # Use GCC-15 from Homebrew
+                    export CC=gcc-15
+                    export CXX=g++-15
+                    export F77=gfortran-15
+                    export FC=gfortran-15
                     export CFLAGS="-fPIC -DPIC"
                     export CXXLAGS="-fPIC -DPIC"
                     export FFLAGS="-fPIC -DPIC -fallow-argument-mismatch"
@@ -123,14 +127,14 @@ jobs:
                 make -j4 install
                 ;;
             OpenMPI)
-                wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.5.tar.gz
+                wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.9.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
-                # Use GCC-14 from Homebrew
-                export CC=gcc-14
-                export CXX=g++-14
-                export F77=gfortran-14
-                export FC=gfortran-14
+                # Use GCC-15 from Homebrew
+                export CC=gcc-15
+                export CXX=g++-15
+                export F77=gfortran-15
+                export FC=gfortran-15
                 # On macOS, MPItrampoline works only for statically
                 # linked OpenMPI libraries.
                 find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g;s/\$\{wl\}-flat_namespace//g'
@@ -193,10 +197,10 @@ jobs:
             # do nothing
             ;;
         macOS)
-            # Use GCC-13 from Homebrew
-            export CC=gcc-13
-            export CXX=g++-13
-            export FC=gfortran-13
+            # Use GCC-15 from Homebrew
+            export CC=gcc-15
+            export CXX=g++-15
+            export FC=gfortran-15
             ;;
         esac
         cmake -B build \
@@ -215,10 +219,10 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-13 from Homebrew
-            export CC=gcc-13
-            export CXX=g++-13
-            export FC=gfortran-13
+            # Use GCC-15 from Homebrew
+            export CC=gcc-15
+            export CXX=g++-15
+            export FC=gfortran-15
             # Not needed for CMAKE_C_COMPILER
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
             ;;
@@ -256,14 +260,14 @@ jobs:
             export FFLAGS='-fcray-pointer'
             ;;
         macOS)
-            # Use GCC-13 from Homebrew
-            export CC=gcc-13
-            export CXX=g++-13
-            export FC=gfortran-13
+            # Use GCC-15 from Homebrew
+            export CC=gcc-15
+            export CXX=g++-15
+            export FC=gfortran-15
             export FFLAGS='-fallow-argument-mismatch -fcray-pointer'
-            export MPITRAMPOLINE_CC=gcc-13
-            export MPITRAMPOLINE_CXX=g++-13
-            export MPITRAMPOLINE_FC=gfortran-13
+            export MPITRAMPOLINE_CC=gcc-15
+            export MPITRAMPOLINE_CXX=g++-15
+            export MPITRAMPOLINE_FC=gfortran-15
             ;;
         esac
         cmake --build ${{github.workspace}}/build --parallel 4
