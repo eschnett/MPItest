@@ -15,6 +15,7 @@ jobs:
       matrix:
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
+        # TODO: switch to ubuntu-22.04
         os:
         - ubuntu-24.04
         - ubuntu-24.04-arm
@@ -72,7 +73,7 @@ jobs:
         macOS)
             case "${{matrix.mpi}}" in
                 MPICH) brew install automake;;
-                OpenMPI) brew install automake;;
+                OpenMPI) brew install automake libtool;;
             esac
             ;;
         esac
