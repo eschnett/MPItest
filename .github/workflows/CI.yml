@@ -65,7 +65,7 @@ jobs:
             ;;
         macOS)
             case "${{matrix.mpi}}" in
-                MPICH) :;;
+                MPICH) brew install automake;;
                 OpenMPI) brew install automake;;
             esac
             ;;
