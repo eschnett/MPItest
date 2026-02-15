@@ -42,10 +42,10 @@
      &     size, rank, trim(processor_name)
 
       call get_environment_variable("MPITEST_COMM_WORLD_SIZE",
-     &     comm_world_size_str, status=status)
-      if (status == 0) then
-         read(comm_world_size_str, *, iostat=status) comm_world_size
-         if (status /= 0) stop
+     &     comm_world_size_str, status=ierror)
+      if (ierror == 0) then
+         read(comm_world_size_str, *, iostat=ierror) comm_world_size
+         if (ierror /= 0) stop
          if (size /= comm_world_size) then
             print '("*** Error: MPI_COMM_WORLD has the wrong size.")'
             print '("  Expected: ",i0)', comm_world_size
