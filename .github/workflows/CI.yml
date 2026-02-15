@@ -36,6 +36,7 @@ jobs:
         # MPICH is broken on Ubuntu 24.04; see
         # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
         # and Debian works as well.
+        # TODO: Try ch3
         - os: ubuntu-24.04
           mpi: MPICH
         - os: ubuntu-24.04-arm
@@ -45,6 +46,8 @@ jobs:
           mpi: OpenMPI          
         # Invalid communicator in Fortran MPI_Comm_rank
         - os: macos-15
+          mpi: MPICH
+        - os: macos-15-intel
           mpi: MPICH
         #TODO   - os: macos-13
         #TODO     shared: SHARED
