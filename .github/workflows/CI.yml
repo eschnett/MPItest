@@ -48,6 +48,8 @@ jobs:
           mpi: MPICH
         - os: ubuntu-24.04-arm
           mpi: MPICH
+        - os: ubuntu-24.04-arm
+          mpi: OpenMPI          # weird segfault in Fortran Allreduce
         #TODO   - os: macos-13
         #TODO     shared: SHARED
         #TODO   - os: macos-14
