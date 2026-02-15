@@ -25,9 +25,9 @@ jobs:
         - MPICH
         - OpenMPI
         findmpi:
-        #TODO - MPIEXEC_EXECUTABLE
+        - MPIEXEC_EXECUTABLE
         - MPI_HOME
-        #TODO - CMAKE_C_COMPILER
+        - CMAKE_C_COMPILER
         shared:
         - STATIC
         - SHARED
@@ -46,10 +46,20 @@ jobs:
         - os: ubuntu-24.04-arm
           mpi: OpenMPI          
         # Invalid communicator in Fortran MPI_Comm_rank
+        # TODO: On macOS, MPItrampoline shared libraries work only for
+        # statically linked MPICH libraries.
         - os: macos-15
           mpi: MPICH
+          shared: SHARED
         - os: macos-15-intel
           mpi: MPICH
+          shared: SHARED
+        - os: macos-15
+          mpi: OpenMPI
+          shared: SHARED
+        - os: macos-15-intel
+          mpi: OpenMPI
+          shared: SHARED
         #TODO   - os: macos-13
         #TODO     shared: SHARED
         #TODO   - os: macos-14
@@ -99,19 +109,16 @@ jobs:
                 cd mpich*
                 if [ ${{matrix.shared}} = STATIC ]; then
                     # Use GCC-15 from Homebrew
-                    ls -l /usr/local/bin/gcc*
-                    ls -l /usr/local/bin/g++*
-                    ls -l /usr/local/bin/gfortran*
+                    export CC=gcc-15
+                    export CXX=g++-15
+                    export F77=gfortran-15
+                    export FC=gfortran-15
                     ./configure \
                         --disable-opencl \
                         --disable-shared \
                         --enable-static \
                         --enable-threads=multiple \
-                        --prefix=${{github.workspace}}/mpi \
-                        CC=gcc-15 \
-                        CXX=g++-15 \
-                        F77=gfortran-15 \
-                        FC=gfortran-15
+                        --prefix=${{github.workspace}}/mpi
                     # ./configure \
                     #     --disable-opencl \
                     #     --enable-threads=multiple \
