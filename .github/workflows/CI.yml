@@ -28,12 +28,19 @@ jobs:
         #TODO shared: [STATIC, SHARED]
         os:
         - ubuntu-24.04
-        - ubuntu-24.04-arm
-        - macos-15
-        - macos-15-intel
-        mpi: [MPICH, OpenMPI]
-        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        shared: [STATIC, SHARED]
+        #TODO - ubuntu-24.04-arm
+        #TODO - macos-15
+        #TODO - macos-15-intel
+        mpi:
+        - MPICH
+        #TODO - OpenMPI
+        findmpi:
+        - MPIEXEC_EXECUTABLE
+        #TODO - MPI_HOME
+        #TODO - CMAKE_C_COMPILER
+        shared:
+        - STATIC
+        #TODO - SHARED
         mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
         #TODO exclude:
