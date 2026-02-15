@@ -13,24 +13,13 @@ jobs:
   build:
     strategy:
       matrix:
-        # The order of these definition matters for the web output
         # TODO: Test on 32-bit systems (not possible with Github Actions?)
         # TODO: Test on Windows
-        #
-        # Note: macos-13 is Intel, macos-14 is ARM
-        #
-        # MPICH is broken on Ubuntu 24.04; see
-        # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
-        # and Debian works as well.
-        #TODO os: [ubuntu-22.04, macos-13, macos-14]
-        #TODO mpi: [MPICH, OpenMPI]
-        #TODO findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        #TODO shared: [STATIC, SHARED]
         os:
         - ubuntu-24.04
         - ubuntu-24.04-arm
-        #TODO - macos-15
-        #TODO - macos-15-intel
+        - macos-15
+        - macos-15-intel
         mpi:
         - MPICH
         - OpenMPI
@@ -44,12 +33,16 @@ jobs:
         mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
         exclude:
+        # MPICH is broken on Ubuntu 24.04; see
+        # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
+        # and Debian works as well.
         - os: ubuntu-24.04
           mpi: MPICH
         - os: ubuntu-24.04-arm
           mpi: MPICH
+        # Weird segfault in Fortran Allreduce
         - os: ubuntu-24.04-arm
-          mpi: OpenMPI          # weird segfault in Fortran Allreduce
+          mpi: OpenMPI          
         #TODO   - os: macos-13
         #TODO     shared: SHARED
         #TODO   - os: macos-14
