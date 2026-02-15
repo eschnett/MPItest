@@ -43,6 +43,9 @@ jobs:
         # Weird segfault in Fortran Allreduce
         - os: ubuntu-24.04-arm
           mpi: OpenMPI          
+        # Invalid communicator in Fortran MPI_Comm_rank
+        - os: macos-15
+          mpi: MPICH
         #TODO   - os: macos-13
         #TODO     shared: SHARED
         #TODO   - os: macos-14
