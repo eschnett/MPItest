@@ -32,11 +32,11 @@ jobs:
         #TODO - macos-15
         #TODO - macos-15-intel
         mpi:
-        - MPICH
-        #TODO - OpenMPI
+        #TODO - MPICH
+        - OpenMPI
         findmpi:
-        #TODO - MPIEXEC_EXECUTABLE
-        - MPI_HOME
+        - MPIEXEC_EXECUTABLE
+        #TODO - MPI_HOME
         #TODO - CMAKE_C_COMPILER
         shared:
         - STATIC
