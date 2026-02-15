@@ -35,8 +35,8 @@ jobs:
         - MPICH
         #TODO - OpenMPI
         findmpi:
-        - MPIEXEC_EXECUTABLE
-        #TODO - MPI_HOME
+        #TODO - MPIEXEC_EXECUTABLE
+        - MPI_HOME
         #TODO - CMAKE_C_COMPILER
         shared:
         - STATIC
