@@ -28,11 +28,11 @@ jobs:
         #TODO shared: [STATIC, SHARED]
         os:
         - ubuntu-24.04
-        #TODO - ubuntu-24.04-arm
+        - ubuntu-24.04-arm
         #TODO - macos-15
         #TODO - macos-15-intel
         mpi:
-        #TODO - MPICH
+        - MPICH
         - OpenMPI
         findmpi:
         - MPIEXEC_EXECUTABLE
@@ -43,7 +43,9 @@ jobs:
         #TODO - SHARED
         mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
-        #TODO exclude:
+        exclude:
+        - os: ubuntu-24.04
+          mpi: MPICH
         #TODO   - os: macos-13
         #TODO     shared: SHARED
         #TODO   - os: macos-14
