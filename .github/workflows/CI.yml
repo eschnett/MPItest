@@ -27,7 +27,7 @@ jobs:
         findmpi:
         - MPIEXEC_EXECUTABLE
         - MPI_HOME
-        - CMAKE_C_COMPILER
+        #TODO - CMAKE_C_COMPILER
         shared:
         - STATIC
         - SHARED
