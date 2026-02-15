@@ -167,30 +167,17 @@ jobs:
     - name: Install MPIwrapper
       run: |
         # See MPIwrapper
-        # export PATH="${{github.workspace}}/mpi/bin:$PATH"
-        # git clone https://github.com/eschnett/MPIwrapper
-        # cd MPIwrapper
-        # git checkout ${{matrix.mpiwrapper}}
-        # cmake -B build \
-        #     -DCMAKE_VERBOSE_MAKEFILE=ON \
-        #     -DCMAKE_C_COMPILER=mpicc \
-        #     -DCMAKE_CXX_COMPILER=mpicxx \
-        #     -DCMAKE_Fortran_COMPILER=mpifort \
-        #     -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-        #     -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
-        # cmake --build build --parallel 4
-        # cmake --install build
+        export PATH="${{github.workspace}}/mpi/bin:$PATH"
         git clone https://github.com/eschnett/MPIwrapper
         cd MPIwrapper
         git checkout ${{matrix.mpiwrapper}}
         cmake -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_C_COMPILER=${{github.workspace}}/mpi/bin/mpicc \
-            -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpicxx \
-            -DCMAKE_Fortran_COMPILER=${{github.workspace}}/mpi/bin/mpifort \
+            -DCMAKE_C_COMPILER=mpicc \
+            -DCMAKE_CXX_COMPILER=mpicxx \
+            -DCMAKE_Fortran_COMPILER=mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
-            -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
         cmake --build build --parallel 4
         cmake --install build
 
