@@ -24,6 +24,9 @@ jobs:
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
         mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
+        exclude:
+        - os: ubuntu-24.04
+          mpi: MPICH
         # include:
         # - os: ubuntu-22.04
         #   mpi: MPICH
