@@ -62,6 +62,10 @@ jobs:
           mpi: MPICH
           shared: SHARED
           findmpi: MPIEXEC_EXECUTABLE
+        - os: ubuntu-22.04-arm
+          mpi: MPICH
+          shared: SHARED
+          findmpi: MPIEXEC_EXECUTABLE
 
     runs-on: ${{matrix.os}}
 
