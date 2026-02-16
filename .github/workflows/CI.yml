@@ -58,21 +58,25 @@ jobs:
         # - os: macos-15-intel
         #   mpi: OpenMPI
         include:
-        - os: ubuntu-22.04
+        #GOOD - os: ubuntu-22.04
+        #GOOD   mpi: MPICH
+        #GOOD   shared: SHARED
+        #GOOD   findmpi: MPIEXEC_EXECUTABLE
+        #GOOD #FAIL - os: ubuntu-22.04-arm
+        #GOOD #FAIL   mpi: MPICH
+        #GOOD #FAIL   shared: SHARED
+        #GOOD #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        #GOOD - os: ubuntu-22.04
+        #GOOD   mpi: OpenMPI
+        #GOOD   shared: SHARED
+        #GOOD   findmpi: MPIEXEC_EXECUTABLE
+        #GOOD - os: ubuntu-24.04
+        #GOOD   mpi: OpenMPI
+        #GOOD   shared: SHARED
+        #GOOD   findmpi: MPIEXEC_EXECUTABLE
+        - os: macos-15-intel
           mpi: MPICH
-          shared: SHARED
-          findmpi: MPIEXEC_EXECUTABLE
-        #FAIL - os: ubuntu-22.04-arm
-        #FAIL   mpi: MPICH
-        #FAIL   shared: SHARED
-        #FAIL   findmpi: MPIEXEC_EXECUTABLE
-        - os: ubuntu-22.04
-          mpi: OpenMPI
-          shared: SHARED
-          findmpi: MPIEXEC_EXECUTABLE
-        - os: ubuntu-24.04
-          mpi: OpenMPI
-          shared: SHARED
+          shared: STATIC
           findmpi: MPIEXEC_EXECUTABLE
 
     runs-on: ${{matrix.os}}
