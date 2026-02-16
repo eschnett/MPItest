@@ -74,10 +74,12 @@ jobs:
         #GOOD   mpi: OpenMPI
         #GOOD   shared: SHARED
         #GOOD   findmpi: MPIEXEC_EXECUTABLE
+        #FAIL # Crashes in mpif
         #FAIL - os: macos-15-intel
         #FAIL   mpi: MPICH
         #FAIL   shared: STATIC
         #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        # Cannot find MPI
         - os: macos-15-intel
           mpi: OpenMPI
           shared: STATIC
@@ -162,7 +164,7 @@ jobs:
                 make -j4 install
                 ;;
             OpenMPI)
-                wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.9.tar.gz
+                wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.8.tar.gz
                 tar xzf openmpi*.tar.gz
                 cd openmpi*
                 # Use GCC-15 from Homebrew
@@ -170,21 +172,14 @@ jobs:
                 export CXX=g++-15
                 export F77=gfortran-15
                 export FC=gfortran-15
-                # On macOS, MPItrampoline works only for statically
-                # linked OpenMPI libraries.
                 find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g;s/\$\{wl\}-flat_namespace//g'
                 ./autogen.pl --force
-                export CFLAGS='-fPIC -DPIC'
-                export CXXLAGS='-fPIC -DPIC'
-                export FFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
-                export FCFLAGS='-fPIC -DPIC -fallow-argument-mismatch'
                 ./configure \
                     --disable-man-pages \
                     --disable-shared \
                     --enable-mpi-fortran=usempif08 \
                     --enable-static \
-                    --prefix=${{github.workspace}}/mpi \
-                    --with-libevent=internal
+                    --prefix=${{github.workspace}}/mpi
                 make -j4
                 make -j4 install
                 ;;
@@ -200,13 +195,13 @@ jobs:
         cd MPIwrapper
         git checkout ${{matrix.mpiwrapper}}
         cmake -B build \
-            -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_C_COMPILER=mpicc \
-            -DCMAKE_CXX_COMPILER=mpicxx \
-            -DCMAKE_Fortran_COMPILER=mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
-            # -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
+            -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpic++ \
+            -DCMAKE_C_COMPILER=${{github.workspace}}/mpi/bin/mpicc \
+            -DCMAKE_Fortran_COMPILER=${{github.workspace}}/mpi/bin/mpifort \
+            -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
         cmake --build build --parallel 4
         cmake --install build
 
