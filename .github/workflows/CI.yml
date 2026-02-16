@@ -18,6 +18,8 @@ jobs:
         os:
         ##TODO - ubuntu-24.04
         ##TODO - ubuntu-24.04-arm
+        - ubuntu-22.04
+        - ubuntu-22.04-arm
         - macos-15
         ##TODO - macos-15-intel
         mpi:
@@ -53,14 +55,8 @@ jobs:
           mpi: MPICH
         - os: macos-15
           mpi: OpenMPI
-          shared: SHARED
         - os: macos-15-intel
           mpi: OpenMPI
-          shared: SHARED
-        #TODO   - os: macos-13
-        #TODO     shared: SHARED
-        #TODO   - os: macos-14
-        #TODO     shared: SHARED
 
     runs-on: ${{matrix.os}}
 
@@ -188,6 +184,7 @@ jobs:
             -DCMAKE_Fortran_COMPILER=mpifort \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper
+            # -DMPIEXEC_EXECUTABLE=${{github.workspace}}/mpi/bin/mpiexec
         cmake --build build --parallel 4
         cmake --install build
 
