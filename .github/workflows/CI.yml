@@ -192,7 +192,8 @@ jobs:
 
     - name: Install MPItrampoline
       run: |
-        git clone https://github.com/eschnett/MPItrampoline
+        #TODO git clone https://github.com/eschnett/MPItrampoline
+        git clone https://github.com/pavanakumar/MPItrampoline
         cd MPItrampoline
         git checkout ${{matrix.mpitrampoline}}
         case $RUNNER_OS in
