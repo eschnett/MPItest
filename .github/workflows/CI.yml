@@ -13,50 +13,55 @@ jobs:
   build:
     strategy:
       matrix:
-        # TODO: Test on 32-bit systems (not possible with Github Actions?)
-        # TODO: switch to ubuntu-22.04
-        os:
-        ##TODO - ubuntu-24.04
-        ##TODO - ubuntu-24.04-arm
-        - ubuntu-22.04
-        - ubuntu-22.04-arm
-        - macos-15
-        ##TODO - macos-15-intel
-        mpi:
-        - MPICH
-        - OpenMPI
-        findmpi:
-        ##TODO - MPIEXEC_EXECUTABLE
-        - MPI_HOME
-        ##TODO - CMAKE_C_COMPILER
-        shared:
-        - STATIC
-        ##TODO - SHARED
-        mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
-        mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
-        exclude:
-        # MPICH is broken on Ubuntu 24.04; see
-        # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
-        # and Debian works as well.
-        # TODO: Try ch3
-        - os: ubuntu-24.04
+        # # TODO: Test on 32-bit systems (not possible with Github Actions?)
+        # # TODO: switch to ubuntu-22.04
+        # os:
+        # ##TODO - ubuntu-24.04
+        # ##TODO - ubuntu-24.04-arm
+        # - ubuntu-22.04
+        # ##TODO - ubuntu-22.04-arm
+        # - macos-15
+        # ##TODO - macos-15-intel
+        # mpi:
+        # - MPICH
+        # - OpenMPI
+        # findmpi:
+        # ##TODO - MPIEXEC_EXECUTABLE
+        # - MPI_HOME
+        # ##TODO - CMAKE_C_COMPILER
+        # shared:
+        # - STATIC
+        # ##TODO - SHARED
+        # mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
+        # mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
+        # exclude:
+        # # MPICH is broken on Ubuntu 24.04; see
+        # # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
+        # # and Debian works as well.
+        # # TODO: Try ch3
+        # - os: ubuntu-24.04
+        #   mpi: MPICH
+        # - os: ubuntu-24.04-arm
+        #   mpi: MPICH
+        # # Weird segfault in Fortran Allreduce
+        # - os: ubuntu-24.04-arm
+        #   mpi: OpenMPI          
+        # # Invalid communicator in Fortran MPI_Comm_rank
+        # # TODO: On macOS, MPItrampoline shared libraries work only for
+        # # statically linked MPICH libraries.
+        # - os: macos-15
+        #   mpi: MPICH
+        # - os: macos-15-intel
+        #   mpi: MPICH
+        # - os: macos-15
+        #   mpi: OpenMPI
+        # - os: macos-15-intel
+        #   mpi: OpenMPI
+        include:
+        - os: ubuntu-22.04
           mpi: MPICH
-        - os: ubuntu-24.04-arm
-          mpi: MPICH
-        # Weird segfault in Fortran Allreduce
-        - os: ubuntu-24.04-arm
-          mpi: OpenMPI          
-        # Invalid communicator in Fortran MPI_Comm_rank
-        # TODO: On macOS, MPItrampoline shared libraries work only for
-        # statically linked MPICH libraries.
-        - os: macos-15
-          mpi: MPICH
-        - os: macos-15-intel
-          mpi: MPICH
-        - os: macos-15
-          mpi: OpenMPI
-        - os: macos-15-intel
-          mpi: OpenMPI
+          shared: SHARED
+          findmpi: MPIEXEC_EXECUTABLE
 
     runs-on: ${{matrix.os}}
 
