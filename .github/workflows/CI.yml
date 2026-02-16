@@ -169,7 +169,7 @@ jobs:
             export MPI_PATH=
             ;;
         macOS)
-            export MPI_PATH="${{github.workspace}}/mpi/bin/
+            export MPI_PATH="${{github.workspace}}/mpi/bin/"
             ;;
         esac
         git clone https://github.com/eschnett/MPIwrapper
