@@ -13,79 +13,44 @@ jobs:
   build:
     strategy:
       matrix:
-        # # TODO: Test on 32-bit systems (not possible with Github Actions?)
-        # # TODO: switch to ubuntu-22.04
-        # os:
-        # ##TODO - ubuntu-24.04
-        # ##TODO - ubuntu-24.04-arm
-        # - ubuntu-22.04
-        # ##TODO - ubuntu-22.04-arm
+        # TODO: Test on 32-bit systems (not possible with Github Actions?)
+        os:
+        - ubuntu-22.04
+        - ubuntu-24.04
+        # - macos-15-intel
         # - macos-15
-        # ##TODO - macos-15-intel
-        # mpi:
-        # - MPICH
-        # - OpenMPI
-        # findmpi:
-        # ##TODO - MPIEXEC_EXECUTABLE
-        # - MPI_HOME
-        # ##TODO - CMAKE_C_COMPILER
-        # shared:
-        # - STATIC
-        # ##TODO - SHARED
-        # mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
-        # mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
-        # exclude:
-        # # MPICH is broken on Ubuntu 24.04; see
-        # # <https://github.com/pmodels/mpich/issues/7064>. Older Ubuntus work,
-        # # and Debian works as well.
-        # # TODO: Try ch3
+        mpi: [MPICH, OpenMPI]
+        shared: [STATIC, SHARED]
+        findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
+        mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
+        mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
+        # include:
+        # - os: ubuntu-22.04
+        #   mpi: MPICH
+        #   shared: SHARED
+        #   findmpi: MPIEXEC_EXECUTABLE
+        # #FAIL - os: ubuntu-22.04-arm
+        # #FAIL   mpi: MPICH
+        # #FAIL   shared: SHARED
+        # #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        # - os: ubuntu-22.04
+        #   mpi: OpenMPI
+        #   shared: SHARED
+        #   findmpi: MPIEXEC_EXECUTABLE
         # - os: ubuntu-24.04
-        #   mpi: MPICH
-        # - os: ubuntu-24.04-arm
-        #   mpi: MPICH
-        # # Weird segfault in Fortran Allreduce
-        # - os: ubuntu-24.04-arm
-        #   mpi: OpenMPI          
-        # # Invalid communicator in Fortran MPI_Comm_rank
-        # # TODO: On macOS, MPItrampoline shared libraries work only for
-        # # statically linked MPICH libraries.
-        # - os: macos-15
-        #   mpi: MPICH
-        # - os: macos-15-intel
-        #   mpi: MPICH
-        # - os: macos-15
         #   mpi: OpenMPI
-        # - os: macos-15-intel
-        #   mpi: OpenMPI
-        include:
-        #GOOD - os: ubuntu-22.04
-        #GOOD   mpi: MPICH
-        #GOOD   shared: SHARED
-        #GOOD   findmpi: MPIEXEC_EXECUTABLE
-        #FAIL - os: ubuntu-22.04-arm
-        #FAIL   mpi: MPICH
-        #FAIL   shared: SHARED
-        #FAIL   findmpi: MPIEXEC_EXECUTABLE
-        #GOOD - os: ubuntu-22.04
-        #GOOD   mpi: OpenMPI
-        #GOOD   shared: SHARED
-        #GOOD   findmpi: MPIEXEC_EXECUTABLE
-        #GOOD - os: ubuntu-24.04
-        #GOOD   mpi: OpenMPI
-        #GOOD   shared: SHARED
-        #GOOD   findmpi: MPIEXEC_EXECUTABLE
-        #FAIL # Crashes in mpif
-        #FAIL - os: macos-15-intel
-        #FAIL   mpi: MPICH
-        #FAIL   shared: STATIC
-        #FAIL   findmpi: MPIEXEC_EXECUTABLE
-        # Cannot find MPI
-        - os: macos-15-intel
-          mpi: OpenMPI
-          shared: STATIC
-          findmpi: MPIEXEC_EXECUTABLE
-
-        # IDEAS: macos-14-intel, MPICH 4.3.2, (ch3)
+        #   shared: SHARED
+        #   findmpi: MPIEXEC_EXECUTABLE
+        # #FAIL # Crashes in mpif
+        # #FAIL - os: macos-15-intel
+        # #FAIL   mpi: MPICH
+        # #FAIL   shared: STATIC
+        # #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        # #FAIL # Crashes in mpif
+        # #FAIL - os: macos-15-intel
+        # #FAIL   mpi: OpenMPI
+        # #FAIL   shared: STATIC
+        # #FAIL   findmpi: MPIEXEC_EXECUTABLE
 
     runs-on: ${{matrix.os}}
 
@@ -174,12 +139,21 @@ jobs:
                 export FC=gfortran-15
                 find . -type f -print0 | xargs -0 perl -pi -e 's/-Wl,-flat_namespace//g;s/\$\{wl\}-flat_namespace//g'
                 ./autogen.pl --force
-                ./configure \
-                    --disable-man-pages \
-                    --disable-shared \
-                    --enable-mpi-fortran=usempif08 \
-                    --enable-static \
-                    --prefix=${{github.workspace}}/mpi
+                if [ ${{matrix.shared}} = STATIC ]; then
+                    ./configure \
+                        --disable-man-pages \
+                        --disable-shared \
+                        --enable-mpi-fortran=usempif08 \
+                        --enable-static \
+                        --prefix=${{github.workspace}}/mpi
+                else
+                    ./configure \
+                        --disable-man-pages \
+                        --disable-static \
+                        --enable-mpi-fortran=usempif08 \
+                        --enable-shared \
+                        --prefix=${{github.workspace}}/mpi
+                fi
                 make -j4
                 make -j4 install
                 ;;
