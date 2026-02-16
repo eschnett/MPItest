@@ -50,10 +50,8 @@ jobs:
         # statically linked MPICH libraries.
         - os: macos-15
           mpi: MPICH
-          shared: SHARED
         - os: macos-15-intel
           mpi: MPICH
-          shared: SHARED
         - os: macos-15
           mpi: OpenMPI
           shared: SHARED
