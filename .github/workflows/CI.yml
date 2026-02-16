@@ -22,7 +22,8 @@ jobs:
         mpi: [MPICH, OpenMPI]
         shared: [STATIC, SHARED]
         findmpi: [MPIEXEC_EXECUTABLE, MPI_HOME, CMAKE_C_COMPILER]
-        mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
+        # mpitrampoline: [9d4e7eb030048f3405cabefa36eb8e6a456fe18b]
+        mpitrampoline: [cc14cab68a687ce3050a96b6de9f62cc1e56b0d6]
         mpiwrapper: [d4cc3eb2d8f19353dac5c4e5846a893959e31a36]
         exclude:
         - os: ubuntu-24.04
