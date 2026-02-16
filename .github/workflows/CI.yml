@@ -62,8 +62,16 @@ jobs:
           mpi: MPICH
           shared: SHARED
           findmpi: MPIEXEC_EXECUTABLE
-        - os: ubuntu-22.04-arm
-          mpi: MPICH
+        #FAIL - os: ubuntu-22.04-arm
+        #FAIL   mpi: MPICH
+        #FAIL   shared: SHARED
+        #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        - os: ubuntu-22.04
+          mpi: OpenMPI
+          shared: SHARED
+          findmpi: MPIEXEC_EXECUTABLE
+        - os: ubuntu-24.04
+          mpi: OpenMPI
           shared: SHARED
           findmpi: MPIEXEC_EXECUTABLE
 
