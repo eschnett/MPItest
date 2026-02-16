@@ -166,10 +166,10 @@ jobs:
         # See MPIwrapper
         case $RUNNER_OS in
         Linux)
-            export MPI_PATH=
+            export MPI_PATH=/usr/bin
             ;;
         macOS)
-            export MPI_PATH="${{github.workspace}}/mpi/bin/"
+            export MPI_PATH="${{github.workspace}}/mpi/bin"
             ;;
         esac
         git clone https://github.com/eschnett/MPIwrapper
@@ -177,12 +177,12 @@ jobs:
         git checkout ${{matrix.mpiwrapper}}
         cmake -B build \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_CXX_COMPILER=${MPI_PATH}mpicxx \
-            -DCMAKE_C_COMPILER=${MPI_PATH}mpicc \
-            -DCMAKE_Fortran_COMPILER=${MPI_PATH}mpifort \
+            -DCMAKE_CXX_COMPILER=$MPI_PATH/mpicxx \
+            -DCMAKE_C_COMPILER=$MPI_PATH/mpicc \
+            -DCMAKE_Fortran_COMPILER=$MPI_PATH/mpifort \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DMPIEXEC_EXECUTABLE=${MPI_PATH}mpiexec
+            -DMPIEXEC_EXECUTABLE=$MPI_PATH/mpiexec
         cmake --build build --parallel 4
         cmake --install build
 
