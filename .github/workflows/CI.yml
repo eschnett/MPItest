@@ -170,7 +170,7 @@ jobs:
         git checkout ${{matrix.mpiwrapper}}
         cmake -B build \
             -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-            -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpic++ \
+            -DCMAKE_CXX_COMPILER=${{github.workspace}}/mpi/bin/mpicxx \
             -DCMAKE_C_COMPILER=${{github.workspace}}/mpi/bin/mpicc \
             -DCMAKE_Fortran_COMPILER=${{github.workspace}}/mpi/bin/mpifort \
             -DCMAKE_INSTALL_PREFIX=$HOME/mpiwrapper \
