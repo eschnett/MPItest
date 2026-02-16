@@ -62,10 +62,10 @@ jobs:
         #GOOD   mpi: MPICH
         #GOOD   shared: SHARED
         #GOOD   findmpi: MPIEXEC_EXECUTABLE
-        #GOOD #FAIL - os: ubuntu-22.04-arm
-        #GOOD #FAIL   mpi: MPICH
-        #GOOD #FAIL   shared: SHARED
-        #GOOD #FAIL   findmpi: MPIEXEC_EXECUTABLE
+        #FAIL - os: ubuntu-22.04-arm
+        #FAIL   mpi: MPICH
+        #FAIL   shared: SHARED
+        #FAIL   findmpi: MPIEXEC_EXECUTABLE
         #GOOD - os: ubuntu-22.04
         #GOOD   mpi: OpenMPI
         #GOOD   shared: SHARED
@@ -74,10 +74,16 @@ jobs:
         #GOOD   mpi: OpenMPI
         #GOOD   shared: SHARED
         #GOOD   findmpi: MPIEXEC_EXECUTABLE
+        #FAIL - os: macos-15-intel
+        #FAIL   mpi: MPICH
+        #FAIL   shared: STATIC
+        #FAIL   findmpi: MPIEXEC_EXECUTABLE
         - os: macos-15-intel
-          mpi: MPICH
+          mpi: OpenMPI
           shared: STATIC
           findmpi: MPIEXEC_EXECUTABLE
+
+        # IDEAS: macos-14-intel, MPICH 4.3.2, (ch3)
 
     runs-on: ${{matrix.os}}
 
@@ -133,11 +139,6 @@ jobs:
                         --enable-static \
                         --enable-threads=multiple \
                         --prefix=${{github.workspace}}/mpi
-                    # ./configure \
-                    #     --disable-opencl \
-                    #     --enable-threads=multiple \
-                    #     --enable-two-level-namespace \
-                    #     --prefix=${{github.workspace}}/mpi
                 else
                     #TODO exit 1
                     # On macOS, MPItrampoline shared libraries work
